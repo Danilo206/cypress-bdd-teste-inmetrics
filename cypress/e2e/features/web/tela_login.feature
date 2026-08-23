@@ -1,7 +1,8 @@
-Feature: Página de Home do Automation Exercise
+@login
+Feature: Página de Login e Home do Automation Exercise
   Como usuário do site automationexercise
-  Quero fazer meus pedidos
-  Para que eu possa concluir minhas compras com sucesso
+  Quero fazer minha autenticação no sistema
+  Para que eu possa ter acesso ao sistema do Automation Exercise
 
   Scenario Outline: Realizar login do sistema automationexercise com dados inválidos
     Given que acesso a página automationexercise <login> e <password> com dados inválidos
