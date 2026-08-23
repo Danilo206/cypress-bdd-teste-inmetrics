@@ -10,8 +10,8 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.feature',
     supportFile: 'cypress/support/e2e.ts',
     env: {
-      AUTOMATIONEXERCISE_EMAIL: process.env.AUTOMATIONEXERCISE_EMAIL || '',
-      AUTOMATIONEXERCISE_PASSWORD: process.env.AUTOMATIONEXERCISE_PASSWORD || '',
+      AUTOMATIONEXERCISE_EMAIL: process.env.AUTOMATIONEXERCISE_EMAIL || process.env.EMAIL || '',
+      AUTOMATIONEXERCISE_PASSWORD: process.env.AUTOMATIONEXERCISE_PASSWORD || process.env.SENHA || '',
     },
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);
