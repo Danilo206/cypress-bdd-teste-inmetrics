@@ -1,12 +1,19 @@
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import camposAutomationExercise from '../elements/campos_automationexercise';
 
+const email = Cypress.env('AUTOMATIONEXERCISE_EMAIL');
+const password = Cypress.env('AUTOMATIONEXERCISE_PASSWORD');
+
+if (!email || !password) {
+	throw new Error('AUTOMATIONEXERCISE_EMAIL e AUTOMATIONEXERCISE_PASSWORD devem estar configurados como secrets do GitHub Actions ou variáveis de ambiente locais.');
+}
+
 Given('que estou autenticado no sistema automationexercise com dados válidos', () => {
-	cy.loginByPost('teste2021@teste.com.br', 'teste');
+	cy.loginByPost(email, password);
 });
 
 Given('que acesso a página automationexercise login e insiro dados válidos', () => {
-	cy.login('teste2021@teste.com.br', 'teste');
+	cy.login(email, password);
 });
 
 Given(/^que acesso a página automationexercise (.+) e (.+) com dados inválidos$/, (login, password) => {

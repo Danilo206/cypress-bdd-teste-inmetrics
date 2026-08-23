@@ -10,6 +10,9 @@ permissions:
 jobs:
   cypress:
     runs-on: ubuntu-latest
+    env:
+      AUTOMATIONEXERCISE_EMAIL: ${{ secrets.AUTOMATIONEXERCISE_EMAIL || secrets.EMAIL }}
+      AUTOMATIONEXERCISE_PASSWORD: ${{ secrets.AUTOMATIONEXERCISE_PASSWORD || secrets.SENHA }}
 
     steps:
       - name: Checkout repository

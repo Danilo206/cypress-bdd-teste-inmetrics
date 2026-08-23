@@ -9,6 +9,10 @@ export default defineConfig({
     baseUrl: environmentConfig.baseUrl,
     specPattern: 'cypress/e2e/**/*.feature',
     supportFile: 'cypress/support/e2e.ts',
+    env: {
+      AUTOMATIONEXERCISE_EMAIL: process.env.AUTOMATIONEXERCISE_EMAIL || '',
+      AUTOMATIONEXERCISE_PASSWORD: process.env.AUTOMATIONEXERCISE_PASSWORD || '',
+    },
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);
       on('file:preprocessor', createBundler({
