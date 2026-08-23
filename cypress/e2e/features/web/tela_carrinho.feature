@@ -8,3 +8,7 @@ Feature: Página de Home do Automation Exercise
 
   Scenario: Realizar inserção de produto no carrinho
     Then visualizo os produtos inseridos com sucesso
+
+  Scenario: Realizar inserção de produto na tela de checkout
+    When clico no botão de checkout
+    Then visualizo os produtos inseridos em checkout com sucesso

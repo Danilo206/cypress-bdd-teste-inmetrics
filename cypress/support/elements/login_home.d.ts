@@ -7,10 +7,6 @@ declare const camposAutomationExercise: {
   userIcon: string;
   loginErrorMessage: string;
   requiredLoginField: string;
-  poloBrandLink: string;
-  productsItems: string;
-  productsTitle: string;
-  productsBreadcrumbs: string;
 };
 
 export default camposAutomationExercise;
