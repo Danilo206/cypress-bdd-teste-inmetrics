@@ -1,7 +1,8 @@
-Feature: Página de Home do Automation Exercise
+@busca
+Feature: Página de Busca
   Como usuário do site automationexercise
-  Quero fazer meus pedidos
-  Para que eu possa concluir minhas compras com sucesso
+  Quero fazer uma busca de produtos
+  Para que eu possa ver todas as opções de produtos disponíveis no site
 
   Background: Acessar página de login do automationexercise
     Given que acesso a página automationexercise login e insiro dados válidos

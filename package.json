@@ -14,7 +14,10 @@
   "license": "ISC",
   "type": "commonjs",
   "cypress-cucumber-preprocessor": {
-    "stepDefinitions": "cypress/support/steps_web/**/*.{js,mjs,ts,tsx}"
+    "stepDefinitions": [
+      "cypress/support/steps_web/**/*.{js,mjs,ts,tsx}",
+      "cypress/support/steps_back/**/*.{js,mjs,ts,tsx}"
+    ]
   },
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^26.0.0",

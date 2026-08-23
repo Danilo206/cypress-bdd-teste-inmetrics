@@ -1,6 +1,7 @@
-Feature: Página de Home do Automation Exercise
+@insercao_produto
+Feature: Página de Inserção de Produto do Automation Exercise
   Como usuário do site automationexercise
-  Quero fazer meus pedidos
+  Quero inserir produtos no carrinho
   Para que eu possa concluir minhas compras com sucesso
 
   Background: Acessar página de login do automationexercise

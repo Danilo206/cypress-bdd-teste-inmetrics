@@ -1,6 +1,7 @@
-Feature: Página de Home do Automation Exercise
+@carrinho
+Feature: Página de Carrinho do Automation Exercise
   Como usuário do site automationexercise
-  Quero fazer meus pedidos
+  Quero verificar os produtos inseridos no carrinho
   Para que eu possa concluir minhas compras com sucesso
 
   Background: Acessar página de login do automationexercise
