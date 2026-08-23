@@ -11,7 +11,7 @@ export default defineConfig({
     supportFile: 'cypress/support/e2e.ts',
     env: {
       AUTOMATIONEXERCISE_EMAIL: process.env.AUTOMATIONEXERCISE_EMAIL || process.env.EMAIL || '',
-      AUTOMATIONEXERCISE_PASSWORD: process.env.AUTOMATIONEXERCISE_PASSWORD || process.env.SENHA || '',
+      AUTOMATIONEXERCISE_PASSWORD: process.env.AUTOMATIONEXERCISE_PASSWORD || process.env.PASSWORD || '',
     },
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);

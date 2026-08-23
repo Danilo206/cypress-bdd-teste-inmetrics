@@ -10,7 +10,7 @@ permissions:
 jobs:
   cypress:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: teste
     env:
       AUTOMATIONEXERCISE_EMAIL: ${{ secrets.EMAIL }}
       AUTOMATIONEXERCISE_PASSWORD: ${{ secrets.PASSWORD }}
