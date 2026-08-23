@@ -12,7 +12,7 @@ Feature: Página de Home do Automation Exercise
       | invalido@teste.com.br | teste     |
       | teste2021@teste.com.br| abc123    |
 
-  Scenario Outline: Realizar login do sistema automationexercise com dados faltantes
+  Scenario: Realizar login do sistema automationexercise com dados faltantes
     Given que acesso a página automationexercise <login> e <password> com dados faltantes
     Then devo ver uma mensagem de erro de falta de preencimento de campos obrigatórios
 
