@@ -25,3 +25,5 @@ Feature: Página de Home do Automation Exercise
     Given que acesso a página automationexercise login e insiro dados válidos
     Then devo ser redirecionado para a página inicial
 
+  
+
