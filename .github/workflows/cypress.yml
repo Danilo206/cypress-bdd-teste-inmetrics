@@ -10,13 +10,22 @@ permissions:
 jobs:
   cypress:
     runs-on: ubuntu-latest
+    environment: staging
     env:
-      AUTOMATIONEXERCISE_EMAIL: ${{ secrets.AUTOMATIONEXERCISE_EMAIL || secrets.EMAIL }}
-      AUTOMATIONEXERCISE_PASSWORD: ${{ secrets.AUTOMATIONEXERCISE_PASSWORD || secrets.SENHA }}
+      AUTOMATIONEXERCISE_EMAIL: ${{ secrets.EMAIL }}
+      AUTOMATIONEXERCISE_PASSWORD: ${{ secrets.PASSWORD }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Validate secrets
+        shell: bash
+        run: |
+          if [ -z "${AUTOMATIONEXERCISE_EMAIL}" ] || [ -z "${AUTOMATIONEXERCISE_PASSWORD}" ]; then
+            echo "Missing required secrets for Automation Exercise" >&2
+            exit 1
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
