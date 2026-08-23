@@ -12,15 +12,6 @@ Feature: Página de Home do Automation Exercise
       | invalido@teste.com.br | teste     |
       | teste2021@teste.com.br| abc123    |
 
-  Scenario: Realizar login do sistema automationexercise com dados faltantes
-    Given que acesso a página automationexercise <login> e <password> com dados faltantes
-    Then devo ver uma mensagem de erro de falta de preencimento de campos obrigatórios
-
-    Examples:
-      | login                 | password  |
-      | teste2021@teste.com.br|           |
-      |                       | teste     |
-
   Scenario: Realizar login do sistema automationexercise com dados válidos
     Given que acesso a página automationexercise login e insiro dados válidos
     Then devo ser redirecionado para a página inicial

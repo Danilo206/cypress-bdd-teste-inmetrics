@@ -6,7 +6,30 @@ const password = Cypress.env('AUTOMATIONEXERCISE_PASSWORD') || Cypress.env('PASS
 
 
 Given('que acesso a página automationexercise login e insiro dados válidos', () => {
+	cy.login(email, password);	
+});
+
+Given('que acesso a página de carrinho', () => {
 	cy.login(email, password);
+	cy.visit('/products');
+	cy.get(camposAutomationExercise.productsHeaderLink)
+		.should('be.visible')
+		.click();
+	cy.get(camposAutomationExercise.searchProductInput)
+		.should('be.visible')
+		.clear()
+		.type('Polo');
+	cy.get('#submit_search').should('be.visible').click();
+	cy.get(camposAutomationExercise.productsItems).should('be.visible');
+	cy.get(camposAutomationExercise.productsTitle).should('be.visible');
+	cy.get(camposAutomationExercise.viewProductLink).first().click();
+	cy.get(camposAutomationExercise.addToCartButton)
+		.should('be.visible')
+		.click();
+	cy.get(camposAutomationExercise.cartModal).should('be.visible');
+	cy.get(camposAutomationExercise.viewCartLink)
+		.should('be.visible')
+		.click();
 });
 
 Given(/^que acesso a página automationexercise (.+) e (.+) com dados inválidos$/, (login, password) => {
@@ -88,6 +111,19 @@ Then('o modal de produto adicionado ao carrinho deve ser exibido', () => {
 	cy.get(camposAutomationExercise.cartModalBody).should('be.visible');
 	cy.get(camposAutomationExercise.cartModalFooter).should('be.visible');
 	cy.get(camposAutomationExercise.cartModalText).should('be.visible');
+});
+
+Then('visualizo os produtos inseridos com sucesso', () => {
+	cy.get(camposAutomationExercise.cartItems).should('be.visible');
+	cy.get(camposAutomationExercise.cartBreadcrumbs).should('be.visible');
+	cy.get(camposAutomationExercise.cartAction).should('be.visible');
+	cy.get(camposAutomationExercise.cartProduct).should('be.visible');
+	cy.get(camposAutomationExercise.cartDescription).should('be.visible');
+	cy.get(camposAutomationExercise.cartPrice).should('be.visible');
+	cy.get(camposAutomationExercise.cartQuantity).should('be.visible');
+	cy.get(camposAutomationExercise.cartTotal).should('be.visible');
+	cy.get(camposAutomationExercise.cartTotalPrice).should('be.visible');
+	cy.get(camposAutomationExercise.cartDelete).should('be.visible');
 });
 
 Then('devo ser redirecionado para a página de produtos com os produtos selecionados', () => {
