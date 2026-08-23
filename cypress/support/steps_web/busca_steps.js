@@ -2,7 +2,11 @@ import { Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import camposBuscaHome from '../elements/busca_home';
 
 When('clico em um item do menu produtos na lateral esquerda da página', () => {
-	cy.clickVisible(camposBuscaHome.productsSidebarMenuItem);
+	cy.get(camposBuscaHome.productsSidebarMenuItem)
+		.first()
+		.scrollIntoView()
+		.should('be.visible')
+		.click();
 });
 
 When('clico no item de Products do header da página', () => {
