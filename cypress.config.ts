@@ -1,8 +1,51 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { defineConfig } from 'cypress';
 import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 import { environmentConfig } from './config/environment';
+
+const loadLocalEnv = () => {
+  const envPath = path.resolve(process.cwd(), '.env');
+
+  if (!fs.existsSync(envPath)) {
+    return {} as Record<string, string>;
+  }
+
+  const parsed: Record<string, string> = {};
+
+  for (const line of fs.readFileSync(envPath, 'utf8').split(/\r?\n/)) {
+    const trimmed = line.trim();
+
+    if (!trimmed || trimmed.startsWith('#')) {
+      continue;
+    }
+
+    const separatorIndex = trimmed.indexOf('=');
+    if (separatorIndex === -1) {
+      continue;
+    }
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    const value = trimmed.slice(separatorIndex + 1).trim().replace(/^['"]|['"]$/g, '');
+
+    if (key) {
+      parsed[key] = value;
+    }
+  }
+
+  return parsed;
+};
+
+const localEnv = loadLocalEnv();
+const automationExerciseEmail = process.env.AUTOMATIONEXERCISE_EMAIL || localEnv.AUTOMATIONEXERCISE_EMAIL || process.env.EMAIL || localEnv.EMAIL || '';
+const automationExercisePassword = process.env.AUTOMATIONEXERCISE_PASSWORD || localEnv.AUTOMATIONEXERCISE_PASSWORD || process.env.PASSWORD || localEnv.PASSWORD || '';
+
+const maskValue = (value: string) => (value ? 'present' : 'missing');
+
+console.log('[CYPRESS ENV DEBUG] AUTOMATIONEXERCISE_EMAIL loaded:', maskValue(automationExerciseEmail));
+console.log('[CYPRESS ENV DEBUG] AUTOMATIONEXERCISE_PASSWORD loaded:', maskValue(automationExercisePassword));
 
 export default defineConfig({
   e2e: {
@@ -10,8 +53,8 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.feature',
     supportFile: 'cypress/support/e2e.ts',
     env: {
-      AUTOMATIONEXERCISE_EMAIL: process.env.AUTOMATIONEXERCISE_EMAIL || process.env.EMAIL || '',
-      AUTOMATIONEXERCISE_PASSWORD: process.env.AUTOMATIONEXERCISE_PASSWORD || process.env.PASSWORD || '',
+      AUTOMATIONEXERCISE_EMAIL: automationExerciseEmail,
+      AUTOMATIONEXERCISE_PASSWORD: automationExercisePassword,
     },
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);

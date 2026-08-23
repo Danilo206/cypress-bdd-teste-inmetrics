@@ -11,6 +11,16 @@ const camposAutomationExercise = {
 	productsItems: '.features_items',
 	productsTitle: '.title.text-center',
 	productsBreadcrumbs: '.breadcrumbs',
+	productsHeaderLink: '.shop-menu.pull-right a[href="/products"]',
+	searchProductInput: '#search_product',
+	searchProductButton: '#submit_search',
+	viewProductLink: 'a[href^="/product_details/"]',
+	addToCartButton: '.btn.btn-default.cart',
+	cartModal: '.modal-content',
+	cartModalHeader: '.modal-header',
+	cartModalBody: '.modal-body',
+	cartModalFooter: '.modal-footer',
+	cartModalText: '.text-center',
 };
 
 export default camposAutomationExercise;
