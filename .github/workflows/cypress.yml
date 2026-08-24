@@ -25,15 +25,9 @@ jobs:
       - name: Validate secrets
         shell: bash
         run: |
-          if [ -z "${AUTOMATIONEXERCISE_EMAIL}" ] || [ -z "${AUTOMATIONEXERCISE_PASSWORD}" ]; then
-            echo "Missing required secrets for Automation Exercise" >&2
-            exit 1
-          fi
-
-          if [ -z "${TRELLO_ACTION_ID}" ]; then
-            echo "Missing required Trello secret" >&2
-            exit 1
-          fi
+          [ -n "${AUTOMATIONEXERCISE_EMAIL}" ] || exit 1
+          [ -n "${AUTOMATIONEXERCISE_PASSWORD}" ] || exit 1
+          [ -n "${TRELLO_ACTION_ID}" ] || exit 1
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
