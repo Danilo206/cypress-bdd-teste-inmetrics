@@ -1,11 +1,21 @@
 import { Given, Then } from '@badeball/cypress-cucumber-preprocessor';
 
-const trelloActionUrl = Cypress.env('TRELLO_ACTION_URL') || 'https://api.trello.com/1/actions/592f11060f95a3d3d46a987a';
+const getTrelloActionUrl = () => {
+	const env = Cypress.config('env') || {};
+	const directUrl = env.TRELLO_ACTION_URL;
+
+	if (directUrl) {
+		return directUrl;
+	}
+
+	const trelloActionId = env.TRELLO_ACTION_ID || env.TRELLO || '';
+	return trelloActionId ? `https://api.trello.com/1/actions/${trelloActionId}` : '';
+};
 
 Given('que realizo uma requisição GET para a API do Trello com dados válidos', () => {
 	cy.request({
 		method: 'GET',
-		url: trelloActionUrl,
+		url: getTrelloActionUrl(),
 	}).as('trelloResponse');
 });
 

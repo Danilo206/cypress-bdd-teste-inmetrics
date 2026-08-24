@@ -3,11 +3,18 @@ import camposBuscaHome from '../elements/busca_home';
 import camposCarrinhoCheckout from '../elements/carrinho_checkout';
 import camposInsercaoProduto from '../elements/insercao_produto';
 
-const email = Cypress.env('AUTOMATIONEXERCISE_EMAIL') || Cypress.env('EMAIL') || '';
-const password = Cypress.env('AUTOMATIONEXERCISE_PASSWORD') || Cypress.env('PASSWORD') || '';
+const getEmail = () => {
+	const env = Cypress.config('env') || {};
+	return env.AUTOMATIONEXERCISE_EMAIL || env.EMAIL || '';
+};
+
+const getPassword = () => {
+	const env = Cypress.config('env') || {};
+	return env.AUTOMATIONEXERCISE_PASSWORD || env.PASSWORD || '';
+};
 
 Given('que acesso a página de carrinho', () => {
-	cy.login(email, password);
+	cy.login(getEmail(), getPassword());
 	cy.visit('/products');
 	cy.clickVisible(camposBuscaHome.productsHeaderLink);
 	cy.typeVisible(camposBuscaHome.searchProductInput, 'Polo');

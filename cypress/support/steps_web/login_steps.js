@@ -1,11 +1,18 @@
 import { Given, Then } from '@badeball/cypress-cucumber-preprocessor';
 import camposLoginHome from '../elements/login_home';
 
-const email = Cypress.env('AUTOMATIONEXERCISE_EMAIL') || Cypress.env('EMAIL') || '';
-const password = Cypress.env('AUTOMATIONEXERCISE_PASSWORD') || Cypress.env('PASSWORD') || '';
+const getEmail = () => {
+	const env = Cypress.config('env') || {};
+	return env.AUTOMATIONEXERCISE_EMAIL || env.EMAIL || '';
+};
+
+const getPassword = () => {
+	const env = Cypress.config('env') || {};
+	return env.AUTOMATIONEXERCISE_PASSWORD || env.PASSWORD || '';
+};
 
 Given('que acesso a página automationexercise login e insiro dados válidos', () => {
-	cy.login(email, password);
+	cy.login(getEmail(), getPassword());
 });
 
 Given(/^que acesso a página automationexercise (.+) e (.+) com dados inválidos$/, (login, password) => {
