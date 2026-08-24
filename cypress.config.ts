@@ -5,6 +5,7 @@ import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 import { environmentConfig } from './config/environment';
+import allureWriter from '@shelex/cypress-allure-plugin/writer';
 
 const loadLocalEnv = () => {
   const envPath = path.resolve(process.cwd(), '.env');
@@ -62,6 +63,9 @@ export default defineConfig({
     },
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);
+      allureWriter(on, config, {
+        resultsDir: 'allure-results',
+      });
       on('file:preprocessor', createBundler({
         plugins: [createEsbuildPlugin(config)],
       }));
