@@ -13,9 +13,15 @@ const getTrelloActionUrl = () => {
 };
 
 Given('que realizo uma requisição GET para a API do Trello com dados válidos', () => {
+	const url = getTrelloActionUrl();
+
+	if (!url) {
+		throw new Error('TRELLO_ACTION_URL or TRELLO_ACTION_ID is not configured. Set the Trello secret locally or in GitHub Actions before running the API tests.');
+	}
+
 	cy.request({
 		method: 'GET',
-		url: getTrelloActionUrl(),
+		url,
 	}).as('trelloResponse');
 });
 
