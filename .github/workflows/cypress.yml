@@ -13,10 +13,7 @@ jobs:
     env:
       AUTOMATIONEXERCISE_EMAIL: ${{ secrets.EMAIL }}
       AUTOMATIONEXERCISE_PASSWORD: ${{ secrets.PASSWORD }}
-      EMAIL: ${{ secrets.EMAIL }}
-      PASSWORD: ${{ secrets.PASSWORD }}
       TRELLO_ACTION_ID: ${{ secrets.TRELLO }}
-      TRELLO: ${{ secrets.TRELLO }}
 
     steps:
       - name: Checkout repository
