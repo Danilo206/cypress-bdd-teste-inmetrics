@@ -63,9 +63,7 @@ export default defineConfig({
     },
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);
-      allureWriter(on, config, {
-        resultsDir: 'allure-results',
-      });
+      allureWriter(on, config);
       on('file:preprocessor', createBundler({
         plugins: [createEsbuildPlugin(config)],
       }));
