@@ -36,6 +36,12 @@ Feature: Página de Carrinho do Automation Exercise
     Then visualizo mensagem de carrinho vazio
 
   Scenario: Remover produto do carrinho
-    Given que adiciono o produto Polo ao carrinho
+    When clico no item de Products do header da página
+    And insiro o nome do produto "Polo" no campo de pesquisa
+    And clico no botão de pesquisa
+    Then devo ser redirecionado para a página de produtos com os produtos selecionados
+    When clico no botão de view product
+    And clico no botão Add to cart
+    And clico no link View Cart
     When removo o produto do carrinho
     Then visualizo mensagem de carrinho vazio
