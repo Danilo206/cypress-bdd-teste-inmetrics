@@ -14,7 +14,6 @@ jobs:
       EMAIL: ${{ secrets.EMAIL }}
       PASSWORD: ${{ secrets.PASSWORD }}
       TRELLO_ACTION_ID: ${{ secrets.TRELLO }}
-      TRELLO: ${{ secrets.TRELLO }}
 
     steps:
       - name: Checkout repository
@@ -48,8 +47,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Cypress tests with Allure
-        run: npm run test:allure
+      - name: Run smoke tests with Allure
+        run: npm run test:smoke -- --env allure=true
 
       - name: Generate Allure report
         run: npm run allure:report

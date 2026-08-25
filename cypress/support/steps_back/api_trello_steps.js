@@ -1,32 +1,22 @@
 import { Given, Then } from '@badeball/cypress-cucumber-preprocessor';
+import trelloService from '../services/TrelloService';
 
-const trelloActionUrl = Cypress.env('TRELLO_ACTION_URL') || 'https://api.trello.com/1/actions/592f11060f95a3d3d46a987a';
+const trelloActionUrl = Cypress.env('TRELLO_ACTION_URL');
 
 Given('que realizo uma requisição GET para a API do Trello com dados válidos', () => {
-	cy.request({
-		method: 'GET',
-		url: trelloActionUrl,
-	}).as('trelloResponse');
+	if (!trelloActionUrl) {
+		throw new Error('TRELLO_ACTION_URL não configurada.');
+	}
+
+	trelloService.getAction(trelloActionUrl).as('trelloResponse');
 });
 
 Given('que realizo uma requisição GET para a API do Trello com dados inválidos', () => {
-	const invalidTrelloActionUrl = 'https://api.trello.com/1/actions/teste2026';
-
-	cy.request({
-		method: 'GET',
-		url: invalidTrelloActionUrl,
-		failOnStatusCode: false,
-	}).as('trelloResponse');
+	trelloService.getInvalidAction().as('trelloResponse');
 });
 
 Given('que realizo uma requisição GET para a API do Trello sem dados', () => {
-	const emptyTrelloActionUrl = 'https://api.trello.com/1/actions/';
-
-	cy.request({
-		method: 'GET',
-		url: emptyTrelloActionUrl,
-		failOnStatusCode: false,
-	}).as('trelloResponse');
+	trelloService.getWithoutActionId().as('trelloResponse');
 });
 
 Then('devo receber a resposta de sucesso com código 200', () => {

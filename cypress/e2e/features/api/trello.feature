@@ -1,4 +1,4 @@
-@api_trello
+@api_trello @regression
 Feature: API do Trello
   Como usuário do trello
   Quero fazer minhas pesquisas com sucesso

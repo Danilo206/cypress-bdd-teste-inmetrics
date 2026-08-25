@@ -1,4 +1,4 @@
-@contrato_trello
+@contrato_trello @regression
 Feature: Contrato da API do Trello
   Como usuário do trello
   Quero fazer minha validação de contrato da API do Trello
