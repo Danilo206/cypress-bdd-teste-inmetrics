@@ -1,10 +1,28 @@
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
+import productsPage from '../pages/ProductsPage';
+import productDetailsPage from '../pages/ProductDetailsPage';
 import cartPage from '../pages/CartPage';
 import checkoutPage from '../pages/CheckoutPage';
+
+const addProductToCart = (productName) => {
+	productsPage.openFromHeader();
+	productsPage.fillSearch(productName);
+	productsPage.search();
+	productsPage.assertProductsDisplayed();
+	productsPage.openProduct(productName);
+	productDetailsPage.capturePrice();
+	productDetailsPage.addToCart();
+	productDetailsPage.assertProductAdded();
+	productDetailsPage.openCart();
+};
 
 Given('que acesso a página de carrinho sem produtos', () => {
 	cy.visit('/view_cart');
 	cartPage.clearCart();
+});
+
+Given(/^que adiciono o produto (.+) ao carrinho$/, (productName) => {
+	addProductToCart(productName);
 });
 
 When('clico no link View Cart', () => {

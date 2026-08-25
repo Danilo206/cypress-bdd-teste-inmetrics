@@ -32,13 +32,12 @@ class ProductsPage {
 	}
 
 	openProduct(productName) {
-		cy.get(this.selectors.productImage).then(($cards) => {
-			const matchingCards = $cards.filter(
-				(_, productCard) => productCard.querySelector('.productinfo p')?.textContent?.trim() === productName,
-			);
-			expect(matchingCards, `Produto ${productName} não encontrado`).to.have.length(1);
-			cy.wrap(matchingCards).find(this.selectors.viewProductLink).should('be.visible').click();
-		});
+		cy.contains(`${this.selectors.productImage} .productinfo p`, productName)
+			.should('be.visible')
+			.closest(this.selectors.productImage)
+			.find(this.selectors.viewProductLink)
+			.should('be.visible')
+			.click();
 	}
 
 	assertProductsDisplayed() {
