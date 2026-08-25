@@ -3,10 +3,11 @@ import productsPage from '../pages/ProductsPage';
 import productDetailsPage from '../pages/ProductDetailsPage';
 
 When('clico no botão de view product', () => {
-	productsPage.openFirstProduct();
+	productsPage.openProduct('Polo');
 });
 
 When('clico no botão Add to cart', () => {
+	productDetailsPage.capturePrice();
 	productDetailsPage.addToCart();
 });
 

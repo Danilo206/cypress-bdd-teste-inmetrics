@@ -1,40 +1,46 @@
 {
-  "name": "teste_inmetrics",
-  "version": "1.0.0",
-  "description": "Projeto de testes end-to-end com Cypress e BDD",
-  "main": "index.js",
-  "scripts": {
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
-    "test": "npm run cy:run",
-    "test:local": "cypress run",
-    "test:smoke": "npx cypress run --env TAGS='@smoke'",
-    "test:regression": "npx cypress run --env TAGS='@regression'",
-    "test:allure": "npx cypress run --env allure=true",
-    "allure:report": "npx allure generate allure-results --clean -o allure-report",
-    "allure:open": "npx allure open allure-report"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "cypress-cucumber-preprocessor": {
-    "stepDefinitions": [
-      "cypress/support/steps_web/**/*.{js,mjs,ts,tsx}",
-      "cypress/support/steps_back/**/*.{js,mjs,ts,tsx}"
-    ]
-  },
-  "devDependencies": {
-    "@badeball/cypress-cucumber-preprocessor": "^26.0.0",
-    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
-    "@shelex/cypress-allure-plugin": "^2.41.2",
-    "@types/node": "^26.2.0",
-    "allure-commandline": "^2.43.0",
-    "cypress": "^15.21.0",
-    "typescript": "^5.9.3"
-  },
-  "allowScripts": {
-    "cypress@15.21.0": true,
-    "esbuild@0.28.2": true
-  }
+	"name": "teste_inmetrics",
+	"version": "1.0.0",
+	"description": "Projeto de testes end-to-end com Cypress e BDD",
+	"main": "index.js",
+	"scripts": {
+		"cy:open": "cypress open",
+		"cy:run": "cypress run",
+		"test": "npm run cy:run",
+		"test:local": "cypress run",
+		"test:smoke": "npx cypress run --env TAGS='@smoke'",
+		"test:regression": "npx cypress run --env TAGS='@regression'",
+		"test:allure": "npx cypress run --env allure=true",
+		"lint": "eslint . --ignore-pattern node_modules --ignore-pattern cypress/screenshots --ignore-pattern cypress/videos",
+		"format": "prettier --write . --ignore-path .prettierignore",
+		"format:check": "prettier --check . --ignore-path .prettierignore",
+		"allure:report": "npx allure generate allure-results --clean -o allure-report",
+		"allure:open": "npx allure open allure-report"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"cypress-cucumber-preprocessor": {
+		"stepDefinitions": [
+			"cypress/support/steps_web/**/*.{js,mjs,ts,tsx}",
+			"cypress/support/steps_back/**/*.{js,mjs,ts,tsx}"
+		]
+	},
+	"devDependencies": {
+		"@badeball/cypress-cucumber-preprocessor": "^26.0.0",
+		"@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+		"@shelex/cypress-allure-plugin": "^2.41.2",
+		"@types/node": "^26.2.0",
+		"allure-commandline": "^2.43.0",
+		"cypress": "^15.21.0",
+		"eslint": "^8.57.0",
+		"eslint-plugin-cypress": "^3.6.0",
+		"prettier": "^3.6.2",
+		"typescript": "^5.9.3"
+	},
+	"allowScripts": {
+		"cypress@15.21.0": true,
+		"esbuild@0.28.2": true
+	}
 }

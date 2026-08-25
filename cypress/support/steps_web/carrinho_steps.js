@@ -4,29 +4,29 @@ import productDetailsPage from '../pages/ProductDetailsPage';
 import cartPage from '../pages/CartPage';
 import checkoutPage from '../pages/CheckoutPage';
 
-const addPoloToCart = () => {
-	productsPage.visit();
+const addProductToCart = (productName) => {
 	productsPage.openFromHeader();
-	productsPage.fillSearch('Polo');
+	productsPage.fillSearch(productName);
 	productsPage.search();
 	productsPage.assertProductsDisplayed();
-	productsPage.openFirstProduct();
+	productsPage.openProduct(productName);
+	productDetailsPage.capturePrice();
 	productDetailsPage.addToCart();
 	productDetailsPage.assertProductAdded();
 	productDetailsPage.openCart();
 };
-
-Given('que acesso a página de carrinho', () => {
-	cy.visit('/view_cart');
-});
 
 Given('que acesso a página de carrinho sem produtos', () => {
 	cy.visit('/view_cart');
 	cartPage.clearCart();
 });
 
-Given('que adiciono o produto Polo ao carrinho', () => {
-	addPoloToCart();
+Given(/^que adiciono o produto (.+) ao carrinho$/, (productName) => {
+	addProductToCart(productName);
+});
+
+When('clico no link View Cart', () => {
+	cy.get('a[href="/view_cart"]').filter(':visible').first().click();
 });
 
 When('clico no botão de checkout', () => {
@@ -39,12 +39,13 @@ When('removo o produto do carrinho', () => {
 
 Then('visualizo os produtos inseridos com sucesso', () => {
 	cartPage.assertProductDisplayed('Polo');
-	cartPage.assertValues();
+	cy.get('@productPrice').then((price) => cartPage.assertValues(price));
 });
 
 Then('visualizo os produtos inseridos em checkout com sucesso', () => {
 	checkoutPage.assertDetailsDisplayed();
 	checkoutPage.assertProductDisplayed('Polo');
+	cy.get('@productPrice').then((price) => checkoutPage.assertValues(price));
 });
 
 Then('visualizo mensagem de carrinho vazio', () => {

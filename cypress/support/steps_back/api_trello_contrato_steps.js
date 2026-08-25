@@ -1,8 +1,5 @@
 import { Then } from '@badeball/cypress-cucumber-preprocessor';
-import {
-	validateInvalidTrelloContract,
-	validateTrelloContract,
-} from '../contracts/trello.contract';
+import { validateInvalidTrelloContract, validateTrelloContract } from '../contracts/trello.contract';
 
 Then('o contrato da API deve ser validado com sucesso', () => {
 	cy.get('@trelloResponse').then((response) => {

@@ -1,4 +1,4 @@
-@insercao_produto
+@insercao_produto @regression
 Feature: Página de Inserção de Produto do Automation Exercise
   Como usuário do site automationexercise
   Quero inserir produtos no carrinho

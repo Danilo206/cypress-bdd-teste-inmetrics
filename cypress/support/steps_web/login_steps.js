@@ -19,7 +19,3 @@ Then('devo ser redirecionado para a página inicial', () => {
 Then('devo ver uma mensagem de erro', () => {
 	loginPage.assertInvalidLoginMessage('Your email or password is incorrect!');
 });
-
-Then('devo ver uma mensagem de erro de falta de preencimento de campos obrigatórios', () => {
-	loginPage.assertRequiredFieldMessage('Preencha este campo');
-});

@@ -10,30 +10,34 @@ class ProductsPage {
 		productImage: '.product-image-wrapper',
 	};
 
-	visit() {
-		cy.visit('/products');
-	}
-
 	openFromHeader() {
 		this.searchTerm = undefined;
 		cy.get(this.selectors.productsHeaderLink).should('be.visible').click();
 	}
 
 	openFromSidebar() {
-		cy.get(this.selectors.productsSidebarMenuItem).first().scrollIntoView().should('be.visible').click();
+		cy.get(this.selectors.productsSidebarMenuItem).first().scrollIntoView();
+		cy.get(this.selectors.productsSidebarMenuItem).first().should('be.visible').click();
 	}
 
 	fillSearch(productName) {
 		this.searchTerm = productName;
-		cy.get(this.selectors.searchProductInput).should('be.visible').clear().type(productName);
+		cy.get(this.selectors.searchProductInput).should('be.visible');
+		cy.get(this.selectors.searchProductInput).clear();
+		cy.get(this.selectors.searchProductInput).type(productName);
 	}
 
 	search() {
 		cy.get(this.selectors.searchProductButton).should('be.visible').click();
 	}
 
-	openFirstProduct() {
-		cy.get(this.selectors.viewProductLink).first().scrollIntoView().should('be.visible').click();
+	openProduct(productName) {
+		cy.contains(`${this.selectors.productImage} .productinfo p`, productName)
+			.should('be.visible')
+			.closest(this.selectors.productImage)
+			.find(this.selectors.viewProductLink)
+			.should('be.visible')
+			.click();
 	}
 
 	assertProductsDisplayed() {

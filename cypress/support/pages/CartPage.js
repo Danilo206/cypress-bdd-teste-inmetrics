@@ -20,41 +20,69 @@ class CartPage {
 	}
 
 	removeProduct() {
-		cy.get(this.selectors.cartDelete).first().should('be.visible').click();
-		cy.get(this.selectors.cartDelete).should('not.exist');
+		cy.get(this.selectors.cartDelete).then(($items) => {
+			const remainingItems = $items.length - 1;
+			cy.wrap($items.first()).should('be.visible').click();
+			cy.get(this.selectors.cartDelete).should('have.length', remainingItems);
+		});
 	}
 
 	clearCart() {
 		cy.get('body').then(($body) => {
 			if ($body.find(this.selectors.cartDelete).length > 0) {
 				this.removeProduct();
+				this.clearCart();
 			}
 		});
 	}
 
 	assertEmpty() {
-		cy.get(this.selectors.emptyCart)
-			.should('have.css', 'display', 'block')
-			.and('contain.text', 'Cart is empty!');
+		cy.get(this.selectors.emptyCart).should('have.css', 'display', 'block').and('contain.text', 'Cart is empty!');
 	}
 
 	assertProductDisplayed(productName) {
 		[
-			'cartItems', 'cartBreadcrumbs', 'cartAction', 'cartProduct', 'cartDescription',
-			'cartPrice', 'cartQuantity', 'cartTotal', 'cartTotalPrice', 'cartDelete',
+			'cartItems',
+			'cartBreadcrumbs',
+			'cartAction',
+			'cartProduct',
+			'cartDescription',
+			'cartPrice',
+			'cartQuantity',
+			'cartTotal',
+			'cartTotalPrice',
+			'cartDelete',
 		].forEach((selectorName) => cy.get(this.selectors[selectorName]).should('be.visible'));
 		cy.get(this.selectors.cartProductName).should('contain.text', productName);
 	}
 
-	assertValues() {
-		[this.selectors.cartPrice, this.selectors.cartQuantity, this.selectors.cartTotalPrice].forEach((selector) => {
-			cy.get(selector).invoke('text').then((text) => {
-				const numericText = text.match(/\d+(?:[.,]\d+)?/)?.[0];
+	assertValues(expectedPrice) {
+		const readValue = (selector) =>
+			cy.get(selector).then(($element) => {
+				const rawValue = $element.val() || $element.text();
+				const numericText = String(rawValue).match(/\d[\d.,]*/)?.[0];
 				expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
 
-				const value = Number(numericText.replace(',', '.'));
+				const lastComma = numericText.lastIndexOf(',');
+				const lastDot = numericText.lastIndexOf('.');
+				const normalizedText =
+					lastComma > lastDot ? numericText.replace(/\./g, '').replace(',', '.') : numericText.replace(/,/g, '');
+				return Number(normalizedText);
+			});
 
-				expect(value).to.be.greaterThan(0);
+		readValue(this.selectors.cartPrice).then((price) => {
+			expect(price).to.be.greaterThan(0);
+			if (expectedPrice !== undefined) {
+				expect(price).to.be.closeTo(expectedPrice, 0.01);
+			}
+
+			readValue(this.selectors.cartQuantity).then((quantity) => {
+				expect(quantity).to.be.greaterThan(0);
+
+				readValue(this.selectors.cartTotalPrice).then((total) => {
+					expect(total).to.be.greaterThan(0);
+					expect(total).to.be.closeTo(price * quantity, 0.01);
+				});
 			});
 		});
 	}

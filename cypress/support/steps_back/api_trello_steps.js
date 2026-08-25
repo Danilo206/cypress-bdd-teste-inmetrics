@@ -77,5 +77,3 @@ Then('e a mensagem de erro deve ser enviada', () => {
 		throw new Error(`Unexpected response status for error message validation: ${response.status}`);
 	});
 });
-
-
