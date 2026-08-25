@@ -138,7 +138,8 @@ cypress-bdd-teste-inmetrics/
 │   ├── support/
 │   │   ├── commands.ts
 │   │   ├── contracts/
-│   │   ├── elements/
+│   │   ├── pages/
+│   │   ├── services/
 │   │   ├── steps_back/
 │   │   ├── steps_web/
 │   │   └── e2e.ts

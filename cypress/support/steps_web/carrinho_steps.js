@@ -1,59 +1,52 @@
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
-import camposBuscaHome from '../elements/busca_home';
-import camposCarrinhoCheckout from '../elements/carrinho_checkout';
-import camposInsercaoProduto from '../elements/insercao_produto';
+import productsPage from '../pages/ProductsPage';
+import productDetailsPage from '../pages/ProductDetailsPage';
+import cartPage from '../pages/CartPage';
+import checkoutPage from '../pages/CheckoutPage';
 
-const email = Cypress.env('AUTOMATIONEXERCISE_EMAIL') || Cypress.env('EMAIL') || '';
-const password = Cypress.env('AUTOMATIONEXERCISE_PASSWORD') || Cypress.env('PASSWORD') || '';
+const addPoloToCart = () => {
+	productsPage.visit();
+	productsPage.openFromHeader();
+	productsPage.fillSearch('Polo');
+	productsPage.search();
+	productsPage.assertProductsDisplayed();
+	productsPage.openFirstProduct();
+	productDetailsPage.addToCart();
+	productDetailsPage.assertProductAdded();
+	productDetailsPage.openCart();
+};
 
 Given('que acesso a página de carrinho', () => {
-	cy.login(email, password);
-	cy.visit('/products');
-	cy.clickVisible(camposBuscaHome.productsHeaderLink);
-	cy.typeVisible(camposBuscaHome.searchProductInput, 'Polo');
-	cy.clickVisible(camposBuscaHome.searchProductButton);
-	cy.assertVisible(camposBuscaHome.productsItems);
-	cy.assertVisible(camposBuscaHome.productsTitle);
-	cy.get(camposBuscaHome.viewProductLink).first().click();
-	cy.clickVisible(camposInsercaoProduto.addToCartButton);
-	cy.assertVisible(camposInsercaoProduto.cartModal);
-	cy.clickVisible(camposInsercaoProduto.viewCartLink);
+	cy.visit('/view_cart');
+});
+
+Given('que acesso a página de carrinho sem produtos', () => {
+	cy.visit('/view_cart');
+	cartPage.clearCart();
+});
+
+Given('que adiciono o produto Polo ao carrinho', () => {
+	addPoloToCart();
 });
 
 When('clico no botão de checkout', () => {
-	cy.clickVisible(camposCarrinhoCheckout.checkoutButton);
+	cartPage.checkout();
+});
+
+When('removo o produto do carrinho', () => {
+	cartPage.removeProduct();
 });
 
 Then('visualizo os produtos inseridos com sucesso', () => {
-	cy.assertVisible(camposCarrinhoCheckout.cartItems);
-	cy.assertVisible(camposCarrinhoCheckout.cartBreadcrumbs);
-	cy.assertVisible(camposCarrinhoCheckout.cartAction);
-	cy.assertVisible(camposCarrinhoCheckout.cartProduct);
-	cy.assertVisible(camposCarrinhoCheckout.cartDescription);
-	cy.assertVisible(camposCarrinhoCheckout.cartPrice);
-	cy.assertVisible(camposCarrinhoCheckout.cartQuantity);
-	cy.assertVisible(camposCarrinhoCheckout.cartTotal);
-	cy.assertVisible(camposCarrinhoCheckout.cartTotalPrice);
-	cy.assertVisible(camposCarrinhoCheckout.cartDelete);
+	cartPage.assertProductDisplayed('Polo');
+	cartPage.assertValues();
 });
 
 Then('visualizo os produtos inseridos em checkout com sucesso', () => {
-	cy.assertVisible(camposCarrinhoCheckout.checkoutCartItems);
-	cy.assertVisibleContains(camposCarrinhoCheckout.checkoutBreadcrumbs, 'Checkout');
-	cy.assertVisibleContains(camposCarrinhoCheckout.checkoutHeading, 'Address Details');
-	cy.assertVisible(camposCarrinhoCheckout.checkoutInfo);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAddressBox);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAddressTitle);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAddressName);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAddressStreet);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAddressLocation);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAddressCountry);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAddressPhone);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAlternateAddressBox);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAlternateTitle);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAlternateName);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAlternateStreet);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAlternateLocation);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAlternateCountry);
-	cy.assertVisible(camposCarrinhoCheckout.checkoutAlternatePhone);
+	checkoutPage.assertDetailsDisplayed();
+	checkoutPage.assertProductDisplayed('Polo');
+});
+
+Then('visualizo mensagem de carrinho vazio', () => {
+	cartPage.assertEmpty();
 });

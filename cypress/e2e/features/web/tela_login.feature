@@ -11,7 +11,7 @@ Feature: Página de Login e Home do Automation Exercise
     Examples:
       | login                 | password  |
       | invalido@teste.com.br | teste     |
-      | teste2021@teste.com.br| abc123    |
+      | usuario.invalido@teste.com.br | abc123    |
 
   Scenario: Realizar login do sistema automationexercise com dados válidos
     Given que acesso a página automationexercise login e insiro dados válidos
