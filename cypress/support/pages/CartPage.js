@@ -11,11 +11,31 @@ class CartPage {
 		cartTotal: '.cart_total',
 		cartTotalPrice: '.cart_total_price',
 		cartDelete: '.cart_delete',
+		emptyCart: '#empty_cart',
 		checkoutButton: '.btn.btn-default.check_out',
 	};
 
 	checkout() {
 		cy.get(this.selectors.checkoutButton).should('be.visible').click();
+	}
+
+	removeProduct() {
+		cy.get(this.selectors.cartDelete).first().should('be.visible').click();
+		cy.get(this.selectors.cartDelete).should('not.exist');
+	}
+
+	clearCart() {
+		cy.get('body').then(($body) => {
+			if ($body.find(this.selectors.cartDelete).length > 0) {
+				this.removeProduct();
+			}
+		});
+	}
+
+	assertEmpty() {
+		cy.get(this.selectors.emptyCart)
+			.should('have.css', 'display', 'block')
+			.and('contain.text', 'Cart is empty!');
 	}
 
 	assertProductDisplayed(productName) {

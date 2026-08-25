@@ -22,6 +22,7 @@ Given('que acesso a página de carrinho', () => {
 
 Given('que acesso a página de carrinho sem produtos', () => {
 	cy.visit('/view_cart');
+	cartPage.clearCart();
 });
 
 Given('que adiciono o produto Polo ao carrinho', () => {
@@ -33,7 +34,7 @@ When('clico no botão de checkout', () => {
 });
 
 When('removo o produto do carrinho', () => {
-	cy.get('.cart_delete').first().click({ force: true });
+	cartPage.removeProduct();
 });
 
 Then('visualizo os produtos inseridos com sucesso', () => {
@@ -47,5 +48,5 @@ Then('visualizo os produtos inseridos em checkout com sucesso', () => {
 });
 
 Then('visualizo mensagem de carrinho vazio', () => {
-	cy.get('#empty_cart').should('be.visible').and('contain.text', 'Cart is empty!');
+	cartPage.assertEmpty();
 });
