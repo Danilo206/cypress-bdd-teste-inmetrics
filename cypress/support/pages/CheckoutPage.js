@@ -57,7 +57,7 @@ class CheckoutPage {
 		const readValue = (selector) =>
 			cy.get(selector).then(($element) => {
 				const rawValue = $element.val() || $element.text();
-				const numericText = String(rawValue).match(/[\d.,]+/)?.[0];
+				const numericText = String(rawValue).match(/\d[\d.,]*/)?.[0];
 				expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
 				const lastComma = numericText.lastIndexOf(',');
 				const lastDot = numericText.lastIndexOf('.');

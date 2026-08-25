@@ -11,7 +11,7 @@ class ProductDetailsPage {
 	};
 
 	parseValue(rawValue, description) {
-		const numericText = String(rawValue).match(/[\d.,]+/)?.[0];
+		const numericText = String(rawValue).match(/\d[\d.,]*/)?.[0];
 		expect(numericText, `${description} não encontrado`).to.exist;
 
 		const lastComma = numericText.lastIndexOf(',');
