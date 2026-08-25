@@ -27,9 +27,16 @@ class CartPage {
 	}
 
 	assertValues() {
-		cy.get(this.selectors.cartPrice).invoke('text').should('match', /\d/);
-		cy.get(this.selectors.cartQuantity).invoke('text').should('match', /\d/);
-		cy.get(this.selectors.cartTotalPrice).invoke('text').should('match', /\d/);
+		[this.selectors.cartPrice, this.selectors.cartQuantity, this.selectors.cartTotalPrice].forEach((selector) => {
+			cy.get(selector).invoke('text').then((text) => {
+				const normalizedValue = text.trim().replace(/[^\d,.-]/g, '');
+				const value = Number(normalizedValue.includes(',') && !normalizedValue.includes('.')
+					? normalizedValue.replace(',', '.')
+					: normalizedValue.replace(/,/g, ''));
+
+				expect(value).to.be.greaterThan(0);
+			});
+		});
 	}
 }
 

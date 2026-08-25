@@ -40,16 +40,10 @@ const loadLocalEnv = () => {
 };
 
 const localEnv = loadLocalEnv();
-const automationExerciseEmail = process.env.AUTOMATIONEXERCISE_EMAIL || localEnv.AUTOMATIONEXERCISE_EMAIL || process.env.EMAIL || localEnv.EMAIL || '';
-const automationExercisePassword = process.env.AUTOMATIONEXERCISE_PASSWORD || localEnv.AUTOMATIONEXERCISE_PASSWORD || process.env.PASSWORD || localEnv.PASSWORD || '';
-const trelloActionId = process.env.TRELLO_ACTION_ID || localEnv.TRELLO_ACTION_ID || process.env.TRELLO || localEnv.TRELLO || '';
-const trelloActionUrl = process.env.TRELLO_ACTION_URL || localEnv.TRELLO_ACTION_URL || (trelloActionId ? `https://api.trello.com/1/actions/${trelloActionId}` : '');
-
-const maskValue = (value: string) => (value ? 'present' : 'missing');
-
-console.log('[CYPRESS ENV DEBUG] AUTOMATIONEXERCISE_EMAIL loaded:', maskValue(automationExerciseEmail));
-console.log('[CYPRESS ENV DEBUG] AUTOMATIONEXERCISE_PASSWORD loaded:', maskValue(automationExercisePassword));
-console.log('[CYPRESS ENV DEBUG] TRELLO_ACTION_URL loaded:', maskValue(trelloActionUrl));
+const automationExerciseEmail = process.env.AUTOMATIONEXERCISE_EMAIL || process.env.CYPRESS_AUTOMATIONEXERCISE_EMAIL || localEnv.AUTOMATIONEXERCISE_EMAIL || process.env.EMAIL || localEnv.EMAIL || '';
+const automationExercisePassword = process.env.AUTOMATIONEXERCISE_PASSWORD || process.env.CYPRESS_AUTOMATIONEXERCISE_PASSWORD || localEnv.AUTOMATIONEXERCISE_PASSWORD || process.env.PASSWORD || localEnv.PASSWORD || '';
+const trelloActionId = process.env.TRELLO_ACTION_ID || process.env.CYPRESS_TRELLO_ACTION_ID || localEnv.TRELLO_ACTION_ID || process.env.TRELLO || localEnv.TRELLO || '';
+const trelloActionUrl = process.env.TRELLO_ACTION_URL || process.env.CYPRESS_TRELLO_ACTION_URL || localEnv.TRELLO_ACTION_URL || (trelloActionId ? `https://api.trello.com/1/actions/${trelloActionId}` : '');
 
 export default defineConfig({
   e2e: {
@@ -57,9 +51,10 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.feature',
     supportFile: 'cypress/support/e2e.ts',
     env: {
-      AUTOMATIONEXERCISE_EMAIL: automationExerciseEmail,
-      AUTOMATIONEXERCISE_PASSWORD: automationExercisePassword,
-      TRELLO_ACTION_URL: trelloActionUrl,
+      ...(automationExerciseEmail && { AUTOMATIONEXERCISE_EMAIL: automationExerciseEmail }),
+      ...(automationExercisePassword && { AUTOMATIONEXERCISE_PASSWORD: automationExercisePassword }),
+      ...(trelloActionId && { TRELLO_ACTION_ID: trelloActionId }),
+      ...(trelloActionUrl && { TRELLO_ACTION_URL: trelloActionUrl }),
     },
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);

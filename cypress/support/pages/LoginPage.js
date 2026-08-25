@@ -5,7 +5,7 @@ class LoginPage {
 		loginButton: '[data-qa="login-button"]',
 		logoutLink: 'a[href="/logout"]',
 		deleteAccountLink: 'a[href="/delete_account"]',
-		userIcon: 'i.fa-user',
+		userIcon: 'a:has(.fa.fa-user)',
 		loginErrorMessage: 'p[style="color: red;"]',
 		requiredField: '[data-qa="login-email"]:invalid, [data-qa="login-password"]:invalid',
 	};
@@ -27,6 +27,10 @@ class LoginPage {
 	}
 
 	login(email, password) {
+		if (!email || !password) {
+			throw new Error('Credenciais do Automation Exercise não configuradas. Defina AUTOMATIONEXERCISE_EMAIL e AUTOMATIONEXERCISE_PASSWORD no .env local ou no GitHub Actions.');
+		}
+
 		this.visit();
 		this.fillCredentials(email, password);
 		cy.get(this.selectors.loginButton).click();

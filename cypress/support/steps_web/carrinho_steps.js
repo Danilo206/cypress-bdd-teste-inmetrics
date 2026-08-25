@@ -1,12 +1,8 @@
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
-import loginPage from '../pages/LoginPage';
 import productsPage from '../pages/ProductsPage';
 import productDetailsPage from '../pages/ProductDetailsPage';
 import cartPage from '../pages/CartPage';
 import checkoutPage from '../pages/CheckoutPage';
-
-const email = Cypress.env('AUTOMATIONEXERCISE_EMAIL') || Cypress.env('EMAIL') || '';
-const password = Cypress.env('AUTOMATIONEXERCISE_PASSWORD') || Cypress.env('PASSWORD') || '';
 
 const addPoloToCart = () => {
 	productsPage.visit();
@@ -21,17 +17,14 @@ const addPoloToCart = () => {
 };
 
 Given('que acesso a página de carrinho', () => {
-	loginPage.login(email, password);
 	cy.visit('/view_cart');
 });
 
 Given('que acesso a página de carrinho sem produtos', () => {
-	loginPage.login(email, password);
 	cy.visit('/view_cart');
 });
 
 Given('que adiciono o produto Polo ao carrinho', () => {
-	loginPage.login(email, password);
 	addPoloToCart();
 });
 

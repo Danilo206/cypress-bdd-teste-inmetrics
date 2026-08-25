@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: teste
     env:
-      EMAIL: ${{ secrets.EMAIL }}
-      PASSWORD: ${{ secrets.PASSWORD }}
+      AUTOMATIONEXERCISE_EMAIL: ${{ secrets.AUTOMATIONEXERCISE_EMAIL || secrets.EMAIL }}
+      AUTOMATIONEXERCISE_PASSWORD: ${{ secrets.AUTOMATIONEXERCISE_PASSWORD || secrets.PASSWORD }}
       TRELLO_ACTION_ID: ${{ secrets.TRELLO }}
 
     steps:
@@ -22,7 +22,7 @@ jobs:
       - name: Validate secrets
         shell: bash
         run: |
-          if [ -z "${EMAIL}" ] || [ -z "${PASSWORD}" ]; then
+          if [ -z "${AUTOMATIONEXERCISE_EMAIL}" ] || [ -z "${AUTOMATIONEXERCISE_PASSWORD}" ]; then
             echo "Missing required secrets for Automation Exercise" >&2
             exit 1
           fi
