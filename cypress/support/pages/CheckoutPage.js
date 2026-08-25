@@ -2,6 +2,9 @@ class CheckoutPage {
 	selectors = {
 		cartItems: '#cart_items',
 		productName: '.cart_description h4 a',
+		productPrice: '.cart_price',
+		productQuantity: '.cart_quantity',
+		productTotal: '.cart_total_price',
 		breadcrumbs: '.breadcrumbs',
 		heading: '.heading',
 		info: '[data-qa="checkout-info"]',
@@ -23,10 +26,24 @@ class CheckoutPage {
 
 	assertDetailsDisplayed() {
 		const selectors = [
-			'cartItems', 'breadcrumbs', 'heading', 'info', 'addressBox', 'addressTitle',
-			'addressName', 'addressStreet', 'addressLocation', 'addressCountry',
-			'addressPhone', 'alternateAddressBox', 'alternateTitle', 'alternateName',
-			'alternateStreet', 'alternateLocation', 'alternateCountry', 'alternatePhone',
+			'cartItems',
+			'breadcrumbs',
+			'heading',
+			'info',
+			'addressBox',
+			'addressTitle',
+			'addressName',
+			'addressStreet',
+			'addressLocation',
+			'addressCountry',
+			'addressPhone',
+			'alternateAddressBox',
+			'alternateTitle',
+			'alternateName',
+			'alternateStreet',
+			'alternateLocation',
+			'alternateCountry',
+			'alternatePhone',
 		];
 
 		selectors.forEach((selectorName) => cy.get(this.selectors[selectorName]).should('be.visible'));
@@ -34,6 +51,38 @@ class CheckoutPage {
 
 	assertProductDisplayed(productName) {
 		cy.get(this.selectors.productName).should('contain.text', productName);
+	}
+
+	assertValues(expectedPrice) {
+		const parseValue = (text, selector) => {
+			const numericText = text.match(/[\d.,]+/)?.[0];
+			expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
+			return Number(numericText.replace(/,/g, ''));
+		};
+
+		cy.get(this.selectors.productPrice)
+			.invoke('text')
+			.then((text) => {
+				expect(parseValue(text, this.selectors.productPrice)).to.be.closeTo(expectedPrice, 0.01);
+			});
+		cy.get(this.selectors.productQuantity)
+			.invoke('text')
+			.then((text) => {
+				const quantity = parseValue(text, this.selectors.productQuantity);
+				expect(quantity).to.be.greaterThan(0);
+				cy.get(this.selectors.productPrice)
+					.invoke('text')
+					.then((priceText) => {
+						const price = parseValue(priceText, this.selectors.productPrice);
+						cy.get(this.selectors.productTotal)
+							.invoke('text')
+							.then((totalText) => {
+								const total = parseValue(totalText, this.selectors.productTotal);
+								expect(total).to.be.greaterThan(0);
+								expect(total).to.be.closeTo(price * quantity, 0.01);
+							});
+					});
+			});
 	}
 }
 

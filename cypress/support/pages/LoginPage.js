@@ -7,7 +7,6 @@ class LoginPage {
 		deleteAccountLink: 'a[href="/delete_account"]',
 		userIcon: 'a:has(.fa.fa-user)',
 		loginErrorMessage: 'p[style="color: red;"]',
-		requiredField: '[data-qa="login-email"]:invalid, [data-qa="login-password"]:invalid',
 	};
 
 	visit() {
@@ -28,7 +27,9 @@ class LoginPage {
 
 	login(email, password) {
 		if (!email || !password) {
-			throw new Error('Credenciais do Automation Exercise não configuradas. Defina AUTOMATIONEXERCISE_EMAIL e AUTOMATIONEXERCISE_PASSWORD no .env local ou no GitHub Actions.');
+			throw new Error(
+				'Credenciais do Automation Exercise não configuradas. Defina AUTOMATIONEXERCISE_EMAIL e AUTOMATIONEXERCISE_PASSWORD no .env local ou no GitHub Actions.',
+			);
 		}
 
 		this.visit();
@@ -45,10 +46,6 @@ class LoginPage {
 
 	assertInvalidLoginMessage(message) {
 		cy.get(this.selectors.loginErrorMessage).should('be.visible').and('contain.text', message);
-	}
-
-	assertRequiredFieldMessage(message) {
-		cy.get(this.selectors.requiredField).first().invoke('prop', 'validationMessage').should('contain', message);
 	}
 }
 

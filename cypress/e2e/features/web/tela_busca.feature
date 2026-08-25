@@ -1,4 +1,4 @@
-@busca
+@busca @regression
 Feature: Página de Busca
   Como usuário do site automationexercise
   Quero fazer uma busca de produtos

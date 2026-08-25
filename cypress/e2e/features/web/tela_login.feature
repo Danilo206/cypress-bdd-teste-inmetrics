@@ -1,4 +1,4 @@
-@login
+@login @regression
 Feature: Página de Login e Home do Automation Exercise
   Como usuário do site automationexercise
   Quero fazer minha autenticação no sistema

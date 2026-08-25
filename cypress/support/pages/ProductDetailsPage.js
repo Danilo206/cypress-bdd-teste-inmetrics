@@ -6,8 +6,21 @@ class ProductDetailsPage {
 		cartModalBody: '.modal-body',
 		cartModalFooter: '.modal-footer',
 		cartModalText: '.text-center',
+		productPrice: '.product-information span span',
 		viewCartLink: 'a[href="/view_cart"][title="View Cart"], a[href="/view_cart"]:contains("View Cart")',
 	};
+
+	capturePrice() {
+		return cy
+			.get(this.selectors.productPrice)
+			.invoke('text')
+			.then((text) => {
+				const numericText = text.match(/[\d.,]+/)?.[0];
+				expect(numericText, 'Preço do produto não encontrado').to.exist;
+				return Number(numericText.replace(/,/g, ''));
+			})
+			.as('productPrice');
+	}
 
 	addToCart() {
 		cy.get(this.selectors.addToCartButton).should('be.visible').click();
@@ -18,7 +31,9 @@ class ProductDetailsPage {
 		cy.get(this.selectors.cartModalHeader).should('be.visible');
 		cy.get(this.selectors.cartModalBody).should('be.visible');
 		cy.get(this.selectors.cartModalFooter).should('be.visible');
-		cy.get(this.selectors.cartModalText).should('be.visible').and('contain.text', 'Your product has been added to cart.');
+		cy.get(this.selectors.cartModalText)
+			.should('be.visible')
+			.and('contain.text', 'Your product has been added to cart.');
 	}
 
 	openCart() {
