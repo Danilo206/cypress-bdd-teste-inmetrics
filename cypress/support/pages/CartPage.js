@@ -29,10 +29,10 @@ class CartPage {
 	assertValues() {
 		[this.selectors.cartPrice, this.selectors.cartQuantity, this.selectors.cartTotalPrice].forEach((selector) => {
 			cy.get(selector).invoke('text').then((text) => {
-				const normalizedValue = text.trim().replace(/[^\d,.-]/g, '');
-				const value = Number(normalizedValue.includes(',') && !normalizedValue.includes('.')
-					? normalizedValue.replace(',', '.')
-					: normalizedValue.replace(/,/g, ''));
+				const numericText = text.match(/\d+(?:[.,]\d+)?/)?.[0];
+				expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
+
+				const value = Number(numericText.replace(',', '.'));
 
 				expect(value).to.be.greaterThan(0);
 			});

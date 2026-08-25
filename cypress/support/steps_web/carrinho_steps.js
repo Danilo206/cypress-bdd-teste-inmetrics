@@ -47,5 +47,5 @@ Then('visualizo os produtos inseridos em checkout com sucesso', () => {
 });
 
 Then('visualizo mensagem de carrinho vazio', () => {
-	cy.contains('Cart is empty!').should('be.visible');
+	cy.get('#empty_cart').should('be.visible').and('contain.text', 'Cart is empty!');
 });
