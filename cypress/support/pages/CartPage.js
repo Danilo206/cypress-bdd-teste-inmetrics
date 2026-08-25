@@ -57,36 +57,34 @@ class CartPage {
 	}
 
 	assertValues(expectedPrice) {
-		const parseValue = (text, selector) => {
-			const numericText = text.match(/[\d.,]+/)?.[0];
-			expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
-			return Number(numericText.replace(/,/g, ''));
-		};
+		const readValue = (selector) =>
+			cy.get(selector).then(($element) => {
+				const rawValue = $element.val() || $element.text();
+				const numericText = String(rawValue).match(/[\d.,]+/)?.[0];
+				expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
 
-		cy.get(this.selectors.cartPrice)
-			.invoke('text')
-			.then((priceText) => {
-				const price = parseValue(priceText, this.selectors.cartPrice);
-				expect(price).to.be.greaterThan(0);
-				if (expectedPrice !== undefined) {
-					expect(price).to.be.closeTo(expectedPrice, 0.01);
-				}
-
-				cy.get(this.selectors.cartQuantity)
-					.invoke('text')
-					.then((quantityText) => {
-						const quantity = parseValue(quantityText, this.selectors.cartQuantity);
-						expect(quantity).to.be.greaterThan(0);
-
-						cy.get(this.selectors.cartTotalPrice)
-							.invoke('text')
-							.then((totalText) => {
-								const total = parseValue(totalText, this.selectors.cartTotalPrice);
-								expect(total).to.be.greaterThan(0);
-								expect(total).to.be.closeTo(price * quantity, 0.01);
-							});
-					});
+				const lastComma = numericText.lastIndexOf(',');
+				const lastDot = numericText.lastIndexOf('.');
+				const normalizedText =
+					lastComma > lastDot ? numericText.replace(/\./g, '').replace(',', '.') : numericText.replace(/,/g, '');
+				return Number(normalizedText);
 			});
+
+		readValue(this.selectors.cartPrice).then((price) => {
+			expect(price).to.be.greaterThan(0);
+			if (expectedPrice !== undefined) {
+				expect(price).to.be.closeTo(expectedPrice, 0.01);
+			}
+
+			readValue(this.selectors.cartQuantity).then((quantity) => {
+				expect(quantity).to.be.greaterThan(0);
+
+				readValue(this.selectors.cartTotalPrice).then((total) => {
+					expect(total).to.be.greaterThan(0);
+					expect(total).to.be.closeTo(price * quantity, 0.01);
+				});
+			});
+		});
 	}
 }
 

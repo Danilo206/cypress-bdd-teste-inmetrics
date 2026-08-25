@@ -54,35 +54,28 @@ class CheckoutPage {
 	}
 
 	assertValues(expectedPrice) {
-		const parseValue = (text, selector) => {
-			const numericText = text.match(/[\d.,]+/)?.[0];
-			expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
-			return Number(numericText.replace(/,/g, ''));
-		};
+		const readValue = (selector) =>
+			cy.get(selector).then(($element) => {
+				const rawValue = $element.val() || $element.text();
+				const numericText = String(rawValue).match(/[\d.,]+/)?.[0];
+				expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
+				const lastComma = numericText.lastIndexOf(',');
+				const lastDot = numericText.lastIndexOf('.');
+				const normalizedText =
+					lastComma > lastDot ? numericText.replace(/\./g, '').replace(',', '.') : numericText.replace(/,/g, '');
+				return Number(normalizedText);
+			});
 
-		cy.get(this.selectors.productPrice)
-			.invoke('text')
-			.then((text) => {
-				expect(parseValue(text, this.selectors.productPrice)).to.be.closeTo(expectedPrice, 0.01);
-			});
-		cy.get(this.selectors.productQuantity)
-			.invoke('text')
-			.then((text) => {
-				const quantity = parseValue(text, this.selectors.productQuantity);
+		readValue(this.selectors.productPrice).then((price) => {
+			expect(price).to.be.greaterThan(0).and.closeTo(expectedPrice, 0.01);
+			readValue(this.selectors.productQuantity).then((quantity) => {
 				expect(quantity).to.be.greaterThan(0);
-				cy.get(this.selectors.productPrice)
-					.invoke('text')
-					.then((priceText) => {
-						const price = parseValue(priceText, this.selectors.productPrice);
-						cy.get(this.selectors.productTotal)
-							.invoke('text')
-							.then((totalText) => {
-								const total = parseValue(totalText, this.selectors.productTotal);
-								expect(total).to.be.greaterThan(0);
-								expect(total).to.be.closeTo(price * quantity, 0.01);
-							});
-					});
+				readValue(this.selectors.productTotal).then((total) => {
+					expect(total).to.be.greaterThan(0);
+					expect(total).to.be.closeTo(price * quantity, 0.01);
+				});
 			});
+		});
 	}
 }
 

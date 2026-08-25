@@ -10,14 +10,26 @@ class ProductDetailsPage {
 		viewCartLink: 'a[href="/view_cart"][title="View Cart"], a[href="/view_cart"]:contains("View Cart")',
 	};
 
+	parseValue(rawValue, description) {
+		const numericText = String(rawValue).match(/[\d.,]+/)?.[0];
+		expect(numericText, `${description} não encontrado`).to.exist;
+
+		const lastComma = numericText.lastIndexOf(',');
+		const lastDot = numericText.lastIndexOf('.');
+		const normalizedText =
+			lastComma > lastDot ? numericText.replace(/\./g, '').replace(',', '.') : numericText.replace(/,/g, '');
+
+		const value = Number(normalizedText);
+		expect(value, `${description} inválido`).to.be.a('number').and.greaterThan(0);
+		return value;
+	}
+
 	capturePrice() {
 		return cy
 			.get(this.selectors.productPrice)
 			.invoke('text')
 			.then((text) => {
-				const numericText = text.match(/[\d.,]+/)?.[0];
-				expect(numericText, 'Preço do produto não encontrado').to.exist;
-				return Number(numericText.replace(/,/g, ''));
+				return this.parseValue(text, 'Preço do produto');
 			})
 			.as('productPrice');
 	}
