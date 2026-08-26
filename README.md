@@ -19,6 +19,7 @@ Este projeto tem como foco validar cenários de:
 - Node.js
 - Allure Report
 - GitHub Actions
+- Faker.js (massa de dados dinâmica)
 
 ## Requisitos
 
@@ -61,6 +62,18 @@ $env:TRELLO_ACTION_ID = 'seu_id_do_trello'
 ```
 
 Obs.: o projeto também aceita `TRELLO_ACTION_URL` diretamente, caso prefira passar a URL completa.
+
+## Massa de dados dinâmica (Faker)
+
+O projeto usa a biblioteca `@faker-js/faker` para gerar dados fictícios em tempo de execução, evitando valores fixos em cenários que não dependem de um dado específico. Exemplo já utilizado em [cypress/support/steps_web/login_steps.js](cypress/support/steps_web/login_steps.js), no cenário de login com credenciais aleatórias inválidas:
+
+```javascript
+import { faker } from '@faker-js/faker';
+
+loginPage.login(faker.internet.email(), faker.internet.password({ length: 12 }));
+```
+
+Se quiser usar o Faker em novos steps, basta importar `{ faker }` de `@faker-js/faker` e chamar os geradores disponíveis (`faker.person.fullName()`, `faker.internet.email()`, `faker.phone.number()`, `faker.location.city()`, etc.). Consulte a [documentação oficial do Faker](https://fakerjs.dev/api/) para conhecer todos os geradores.
 
 ## Execução local
 

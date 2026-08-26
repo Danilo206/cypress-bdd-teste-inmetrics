@@ -1,25 +1,23 @@
+import { parseMonetaryValue } from '../utils/money';
+import { CART_ROUTE } from './CartPage';
+
+const cartModalFooter = '.modal-footer';
+
 class ProductDetailsPage {
 	selectors = {
 		addToCartButton: '.btn.btn-default.cart',
 		cartModal: '.modal-content',
 		cartModalHeader: '.modal-header',
 		cartModalBody: '.modal-body',
-		cartModalFooter: '.modal-footer',
-		cartModalText: '.text-center',
+		cartModalFooter,
+		cartModalContinueShoppingButton: '.close-modal, .close-checkout-modal',
+		cartModalText: '.modal-body .text-center',
+		cartHeaderLink: `.shop-menu.pull-right a[href="${CART_ROUTE}"]`,
 		productPrice: '.product-information span span',
-		viewCartLink: 'a[href="/view_cart"][title="View Cart"], a[href="/view_cart"]:contains("View Cart")',
 	};
 
 	parseValue(rawValue, description) {
-		const numericText = String(rawValue).match(/\d[\d.,]*/)?.[0];
-		expect(numericText, `${description} não encontrado`).to.exist;
-
-		const lastComma = numericText.lastIndexOf(',');
-		const lastDot = numericText.lastIndexOf('.');
-		const normalizedText =
-			lastComma > lastDot ? numericText.replace(/\./g, '').replace(',', '.') : numericText.replace(/,/g, '');
-
-		const value = Number(normalizedText);
+		const value = parseMonetaryValue(rawValue, description);
 		expect(value, `${description} inválido`).to.be.a('number').and.greaterThan(0);
 		return value;
 	}
@@ -43,13 +41,13 @@ class ProductDetailsPage {
 		cy.get(this.selectors.cartModalHeader).should('be.visible');
 		cy.get(this.selectors.cartModalBody).should('be.visible');
 		cy.get(this.selectors.cartModalFooter).should('be.visible');
-		cy.get(this.selectors.cartModalText)
-			.should('be.visible')
-			.and('contain.text', 'Your product has been added to cart.');
+		cy.get(this.selectors.cartModalText).should('be.visible').and('contain.text', 'added to cart');
 	}
 
-	openCart() {
-		cy.get(this.selectors.viewCartLink).should('be.visible').click();
+	openCartFromModal() {
+		cy.get(this.selectors.cartModal).should('be.visible');
+		cy.get(this.selectors.cartModalContinueShoppingButton).should('be.visible').click();
+		cy.get(this.selectors.cartHeaderLink).should('be.visible').click();
 	}
 }
 

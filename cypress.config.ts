@@ -75,6 +75,12 @@ export default defineConfig({
 		baseUrl: environmentConfig.baseUrl,
 		specPattern: 'cypress/e2e/**/*.feature',
 		supportFile: 'cypress/support/e2e.ts',
+		defaultCommandTimeout: 10000,
+		pageLoadTimeout: 60000,
+		retries: {
+			runMode: 1,
+			openMode: 0,
+		},
 		env: {
 			...(automationExerciseEmail && { AUTOMATIONEXERCISE_EMAIL: automationExerciseEmail }),
 			...(automationExercisePassword && { AUTOMATIONEXERCISE_PASSWORD: automationExercisePassword }),

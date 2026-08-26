@@ -16,6 +16,7 @@ class ProductsPage {
 	}
 
 	openFromSidebar() {
+		this.searchTerm = undefined;
 		cy.get(this.selectors.productsSidebarMenuItem).first().scrollIntoView();
 		cy.get(this.selectors.productsSidebarMenuItem).first().should('be.visible').click();
 	}
