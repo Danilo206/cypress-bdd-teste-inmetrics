@@ -6,6 +6,14 @@ class TrelloService {
 		});
 	}
 
+	getActionWithHeaders(url, headers) {
+		return cy.request({
+			method: 'GET',
+			url,
+			headers,
+		});
+	}
+
 	getInvalidAction() {
 		return cy.request({
 			method: 'GET',

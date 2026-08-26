@@ -1,3 +1,5 @@
+import { parseMonetaryValue } from '../utils/money';
+
 class ProductDetailsPage {
 	selectors = {
 		addToCartButton: '.btn.btn-default.cart',
@@ -7,19 +9,10 @@ class ProductDetailsPage {
 		cartModalFooter: '.modal-footer',
 		cartModalText: '.text-center',
 		productPrice: '.product-information span span',
-		viewCartLink: 'a[href="/view_cart"][title="View Cart"], a[href="/view_cart"]:contains("View Cart")',
 	};
 
 	parseValue(rawValue, description) {
-		const numericText = String(rawValue).match(/\d[\d.,]*/)?.[0];
-		expect(numericText, `${description} não encontrado`).to.exist;
-
-		const lastComma = numericText.lastIndexOf(',');
-		const lastDot = numericText.lastIndexOf('.');
-		const normalizedText =
-			lastComma > lastDot ? numericText.replace(/\./g, '').replace(',', '.') : numericText.replace(/,/g, '');
-
-		const value = Number(normalizedText);
+		const value = parseMonetaryValue(rawValue, description);
 		expect(value, `${description} inválido`).to.be.a('number').and.greaterThan(0);
 		return value;
 	}
@@ -46,10 +39,6 @@ class ProductDetailsPage {
 		cy.get(this.selectors.cartModalText)
 			.should('be.visible')
 			.and('contain.text', 'Your product has been added to cart.');
-	}
-
-	openCart() {
-		cy.get(this.selectors.viewCartLink).should('be.visible').click();
 	}
 }
 

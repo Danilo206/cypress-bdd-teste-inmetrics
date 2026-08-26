@@ -1,20 +1,13 @@
 import { Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import productsPage from '../pages/ProductsPage';
+import { searchProduct } from '../actions/productActions';
 
 When('clico em um item do menu produtos na lateral esquerda da página', () => {
 	productsPage.openFromSidebar();
 });
 
-When('clico no item de Products do header da página', () => {
-	productsPage.openFromHeader();
-});
-
-When('insiro o nome do produto {string} no campo de pesquisa', (productName) => {
-	productsPage.fillSearch(productName);
-});
-
-When('clico no botão de pesquisa', () => {
-	productsPage.search();
+When('busco pelo produto {string}', (productName) => {
+	searchProduct(productName);
 });
 
 Then('devo ser redirecionado para a página de produtos com os produtos selecionados', () => {

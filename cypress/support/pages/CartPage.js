@@ -1,19 +1,33 @@
+import { parseMonetaryValue } from '../utils/money';
+import { cartTableSelectors } from './shared/cartTableSelectors';
+
 class CartPage {
+	path = '/view_cart';
+
 	selectors = {
-		cartItems: '#cart_items',
-		cartBreadcrumbs: '.breadcrumbs',
+		cartItems: cartTableSelectors.items,
+		cartBreadcrumbs: cartTableSelectors.breadcrumbs,
 		cartAction: '#do_action',
 		cartProduct: '.cart_product',
 		cartDescription: '.cart_description',
-		cartProductName: '.cart_description h4 a',
-		cartPrice: '.cart_price',
-		cartQuantity: '.cart_quantity',
+		cartProductName: cartTableSelectors.productName,
+		cartPrice: cartTableSelectors.productPrice,
+		cartQuantity: cartTableSelectors.productQuantity,
 		cartTotal: '.cart_total',
-		cartTotalPrice: '.cart_total_price',
+		cartTotalPrice: cartTableSelectors.productTotal,
 		cartDelete: '.cart_delete',
 		emptyCart: '#empty_cart',
 		checkoutButton: '.btn.btn-default.check_out',
+		viewCartLink: `a[href="${this.path}"]`,
 	};
+
+	visit() {
+		cy.visit(this.path);
+	}
+
+	openViewCartLink() {
+		cy.get(this.selectors.viewCartLink).filter(':visible').first().click();
+	}
 
 	checkout() {
 		cy.get(this.selectors.checkoutButton).should('be.visible').click();
@@ -60,14 +74,7 @@ class CartPage {
 		const readValue = (selector) =>
 			cy.get(selector).then(($element) => {
 				const rawValue = $element.val() || $element.text();
-				const numericText = String(rawValue).match(/\d[\d.,]*/)?.[0];
-				expect(numericText, `Valor não numérico encontrado em ${selector}`).to.exist;
-
-				const lastComma = numericText.lastIndexOf(',');
-				const lastDot = numericText.lastIndexOf('.');
-				const normalizedText =
-					lastComma > lastDot ? numericText.replace(/\./g, '').replace(',', '.') : numericText.replace(/,/g, '');
-				return Number(normalizedText);
+				return parseMonetaryValue(rawValue, `Valor em ${selector}`);
 			});
 
 		readValue(this.selectors.cartPrice).then((price) => {

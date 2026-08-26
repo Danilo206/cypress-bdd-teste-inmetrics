@@ -1,4 +1,6 @@
 class LoginPage {
+	path = '/login';
+
 	selectors = {
 		email: '[data-qa="login-email"]',
 		password: '[data-qa="login-password"]',
@@ -10,7 +12,7 @@ class LoginPage {
 	};
 
 	visit() {
-		cy.visit('/login');
+		cy.visit(this.path);
 	}
 
 	fillCredentials(email, password) {
@@ -38,7 +40,7 @@ class LoginPage {
 	}
 
 	assertLoggedInUser(userName) {
-		cy.url().should('not.include', '/login');
+		cy.url().should('not.include', this.path);
 		cy.get(this.selectors.logoutLink).should('exist');
 		cy.get(this.selectors.deleteAccountLink).should('exist');
 		cy.get(this.selectors.userIcon).should('exist').and('contain.text', userName);

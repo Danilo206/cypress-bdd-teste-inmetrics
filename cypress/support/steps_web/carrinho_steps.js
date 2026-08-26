@@ -3,30 +3,21 @@ import productsPage from '../pages/ProductsPage';
 import productDetailsPage from '../pages/ProductDetailsPage';
 import cartPage from '../pages/CartPage';
 import checkoutPage from '../pages/CheckoutPage';
-
-const addProductToCart = (productName) => {
-	productsPage.openFromHeader();
-	productsPage.fillSearch(productName);
-	productsPage.search();
-	productsPage.assertProductsDisplayed();
-	productsPage.openProduct(productName);
-	productDetailsPage.capturePrice();
-	productDetailsPage.addToCart();
-	productDetailsPage.assertProductAdded();
-	productDetailsPage.openCart();
-};
+import { addCurrentProductToCart, searchProduct, selectProduct } from '../actions/productActions';
 
 Given('que acesso a página de carrinho sem produtos', () => {
-	cy.visit('/view_cart');
+	cartPage.visit();
 	cartPage.clearCart();
 });
 
-Given(/^que adiciono o produto (.+) ao carrinho$/, (productName) => {
-	addProductToCart(productName);
-});
-
-When('clico no link View Cart', () => {
-	cy.get('a[href="/view_cart"]').filter(':visible').first().click();
+When('adiciono o produto {string} ao carrinho', (productName) => {
+	searchProduct(productName);
+	productsPage.assertProductsDisplayed();
+	selectProduct(productName);
+	addCurrentProductToCart();
+	productDetailsPage.assertProductAdded();
+	cartPage.openViewCartLink();
+	cy.wrap(productName).as('productName');
 });
 
 When('clico no botão de checkout', () => {
@@ -38,13 +29,13 @@ When('removo o produto do carrinho', () => {
 });
 
 Then('visualizo os produtos inseridos com sucesso', () => {
-	cartPage.assertProductDisplayed('Polo');
+	cy.get('@productName').then((productName) => cartPage.assertProductDisplayed(productName));
 	cy.get('@productPrice').then((price) => cartPage.assertValues(price));
 });
 
 Then('visualizo os produtos inseridos em checkout com sucesso', () => {
 	checkoutPage.assertDetailsDisplayed();
-	checkoutPage.assertProductDisplayed('Polo');
+	cy.get('@productName').then((productName) => checkoutPage.assertProductDisplayed(productName));
 	cy.get('@productPrice').then((price) => checkoutPage.assertValues(price));
 });
 

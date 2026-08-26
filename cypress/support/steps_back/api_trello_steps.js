@@ -19,6 +19,25 @@ Given('que realizo uma requisição GET para a API do Trello sem dados', () => {
 	trelloService.getWithoutActionId().as('trelloResponse');
 });
 
+Given('que realizo uma requisição GET para a API do Trello com dados válidos e o header Accept {string}', (acceptHeader) => {
+	if (!trelloActionUrl) {
+		throw new Error('TRELLO_ACTION_URL não configurada.');
+	}
+
+	trelloService.getActionWithHeaders(trelloActionUrl, { Accept: acceptHeader }).as('trelloResponse');
+});
+
+Given(
+	'que realizo uma requisição GET para a API do Trello com dados válidos e um header customizado {string} definido como {string}',
+	(headerName, headerValue) => {
+		if (!trelloActionUrl) {
+			throw new Error('TRELLO_ACTION_URL não configurada.');
+		}
+
+		trelloService.getActionWithHeaders(trelloActionUrl, { [headerName]: headerValue }).as('trelloResponse');
+	},
+);
+
 Then('devo receber a resposta de sucesso com código 200', () => {
 	cy.get('@trelloResponse').then((response) => {
 		expect(response.status).to.eq(200);
@@ -55,6 +74,13 @@ Then('o campo name devidamente preenchido', () => {
 Then('o campo name não deve ser preenchido', () => {
 	cy.get('@trelloResponse').then((response) => {
 		expect(response.body).to.not.have.nested.property('data.list.name');
+	});
+});
+
+Then('o header content-type da resposta deve conter {string}', (expectedContentType) => {
+	cy.get('@trelloResponse').then((response) => {
+		expect(response.headers).to.have.property('content-type');
+		expect(response.headers['content-type']).to.include(expectedContentType);
 	});
 });
 
