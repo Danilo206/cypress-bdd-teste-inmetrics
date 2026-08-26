@@ -20,7 +20,7 @@ When('adiciono o produto {string} ao carrinho', (productName) => {
 	cy.wrap(productName).as('productName');
 });
 
-When('clico no botão de checkout', () => {
+When('prosseguo para o checkout', () => {
 	cartPage.checkout();
 });
 
@@ -28,8 +28,8 @@ When('removo o produto do carrinho', () => {
 	cartPage.removeProduct();
 });
 
-Then('visualizo os produtos inseridos com sucesso', () => {
-	cy.get('@productName').then((productName) => cartPage.assertProductDisplayed(productName));
+Then('visualizo o produto {string} no carrinho', (productName) => {
+	cartPage.assertProductDisplayed(productName);
 	cy.get('@productPrice').then((price) => cartPage.assertValues(price));
 });
 

@@ -1,5 +1,5 @@
 import { parseMonetaryValue } from '../utils/money';
-import cartPage from './CartPage';
+import { CART_ROUTE } from './CartPage';
 
 const cartModalFooter = '.modal-footer';
 
@@ -10,8 +10,9 @@ class ProductDetailsPage {
 		cartModalHeader: '.modal-header',
 		cartModalBody: '.modal-body',
 		cartModalFooter,
-		cartModalText: '.text-center',
-		cartModalViewCartLink: `${cartModalFooter} a[href="${cartPage.path}"]`,
+		cartModalContinueShoppingButton: '.close-modal, .close-checkout-modal',
+		cartModalText: '.modal-body .text-center',
+		cartHeaderLink: `.shop-menu.pull-right a[href="${CART_ROUTE}"]`,
 		productPrice: '.product-information span span',
 	};
 
@@ -42,11 +43,13 @@ class ProductDetailsPage {
 		cy.get(this.selectors.cartModalFooter).should('be.visible');
 		cy.get(this.selectors.cartModalText)
 			.should('be.visible')
-			.and('contain.text', 'Your product has been added to cart.');
+			.and('contain.text', 'added to cart');
 	}
 
 	openCartFromModal() {
-		cy.get(this.selectors.cartModalViewCartLink).should('be.visible').click();
+		cy.get(this.selectors.cartModal).should('be.visible');
+		cy.get(this.selectors.cartModalContinueShoppingButton).should('be.visible').click();
+		cy.get(this.selectors.cartHeaderLink).should('be.visible').click();
 	}
 }
 

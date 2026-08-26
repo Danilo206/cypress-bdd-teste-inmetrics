@@ -1,8 +1,10 @@
 import { readMonetaryValue } from '../utils/money';
 import { cartTableSelectors } from './shared/cartTableSelectors';
 
+export const CART_ROUTE = '/view_cart';
+
 class CartPage {
-	path = '/view_cart';
+	path = CART_ROUTE;
 
 	selectors = {
 		cartItems: cartTableSelectors.items,

@@ -11,12 +11,12 @@ Feature: Página de Carrinho do Automation Exercise
   @smoke
   Scenario: Realizar inserção de produto no carrinho
     When adiciono o produto "Polo" ao carrinho
-    Then visualizo os produtos inseridos com sucesso
+    Then visualizo o produto "Polo" no carrinho
 
   @smoke
-  Scenario: Realizar inserção de produto na tela de checkout
+  Scenario: Finalizar compra com produto inserido
     When adiciono o produto "Polo" ao carrinho
-    And clico no botão de checkout
+    And prosseguo para o checkout
     Then visualizo os produtos inseridos em checkout com sucesso
 
   Scenario: Visualizar carrinho vazio
