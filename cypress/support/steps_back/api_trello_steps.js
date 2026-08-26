@@ -19,13 +19,16 @@ Given('que realizo uma requisição GET para a API do Trello sem dados', () => {
 	trelloService.getWithoutActionId().as('trelloResponse');
 });
 
-Given('que realizo uma requisição GET para a API do Trello com dados válidos e o header Accept {string}', (acceptHeader) => {
-	if (!trelloActionUrl) {
-		throw new Error('TRELLO_ACTION_URL não configurada.');
-	}
+Given(
+	'que realizo uma requisição GET para a API do Trello com dados válidos e o header Accept {string}',
+	(acceptHeader) => {
+		if (!trelloActionUrl) {
+			throw new Error('TRELLO_ACTION_URL não configurada.');
+		}
 
-	trelloService.getActionWithHeaders(trelloActionUrl, { Accept: acceptHeader }).as('trelloResponse');
-});
+		trelloService.getActionWithHeaders(trelloActionUrl, { Accept: acceptHeader }).as('trelloResponse');
+	},
+);
 
 Given(
 	'que realizo uma requisição GET para a API do Trello com dados válidos e um header customizado {string} definido como {string}',
