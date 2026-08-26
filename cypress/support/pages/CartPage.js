@@ -1,4 +1,4 @@
-import { parseMonetaryValue } from '../utils/money';
+import { readMonetaryValue } from '../utils/money';
 import { cartTableSelectors } from './shared/cartTableSelectors';
 
 class CartPage {
@@ -18,15 +18,10 @@ class CartPage {
 		cartDelete: '.cart_delete',
 		emptyCart: '#empty_cart',
 		checkoutButton: '.btn.btn-default.check_out',
-		viewCartLink: `a[href="${this.path}"]`,
 	};
 
 	visit() {
 		cy.visit(this.path);
-	}
-
-	openViewCartLink() {
-		cy.get(this.selectors.viewCartLink).filter(':visible').first().click();
 	}
 
 	checkout() {
@@ -71,22 +66,16 @@ class CartPage {
 	}
 
 	assertValues(expectedPrice) {
-		const readValue = (selector) =>
-			cy.get(selector).then(($element) => {
-				const rawValue = $element.val() || $element.text();
-				return parseMonetaryValue(rawValue, `Valor em ${selector}`);
-			});
-
-		readValue(this.selectors.cartPrice).then((price) => {
+		readMonetaryValue(this.selectors.cartPrice).then((price) => {
 			expect(price).to.be.greaterThan(0);
 			if (expectedPrice !== undefined) {
 				expect(price).to.be.closeTo(expectedPrice, 0.01);
 			}
 
-			readValue(this.selectors.cartQuantity).then((quantity) => {
+			readMonetaryValue(this.selectors.cartQuantity).then((quantity) => {
 				expect(quantity).to.be.greaterThan(0);
 
-				readValue(this.selectors.cartTotalPrice).then((total) => {
+				readMonetaryValue(this.selectors.cartTotalPrice).then((total) => {
 					expect(total).to.be.greaterThan(0);
 					expect(total).to.be.closeTo(price * quantity, 0.01);
 				});
@@ -94,5 +83,3 @@ class CartPage {
 		});
 	}
 }
-
-export default new CartPage();

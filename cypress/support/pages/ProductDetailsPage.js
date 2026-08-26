@@ -1,4 +1,7 @@
 import { parseMonetaryValue } from '../utils/money';
+import cartPage from './CartPage';
+
+const cartModalFooter = '.modal-footer';
 
 class ProductDetailsPage {
 	selectors = {
@@ -6,8 +9,9 @@ class ProductDetailsPage {
 		cartModal: '.modal-content',
 		cartModalHeader: '.modal-header',
 		cartModalBody: '.modal-body',
-		cartModalFooter: '.modal-footer',
+		cartModalFooter,
 		cartModalText: '.text-center',
+		cartModalViewCartLink: `${cartModalFooter} a[href="${cartPage.path}"]`,
 		productPrice: '.product-information span span',
 	};
 
@@ -39,6 +43,10 @@ class ProductDetailsPage {
 		cy.get(this.selectors.cartModalText)
 			.should('be.visible')
 			.and('contain.text', 'Your product has been added to cart.');
+	}
+
+	openCartFromModal() {
+		cy.get(this.selectors.cartModalViewCartLink).should('be.visible').click();
 	}
 }
 

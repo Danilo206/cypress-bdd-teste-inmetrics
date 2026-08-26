@@ -1,4 +1,4 @@
-import { parseMonetaryValue } from '../utils/money';
+import { readMonetaryValue } from '../utils/money';
 import { cartTableSelectors } from './shared/cartTableSelectors';
 
 const addressSelectors = {
@@ -64,17 +64,11 @@ class CheckoutPage {
 	}
 
 	assertValues(expectedPrice) {
-		const readValue = (selector) =>
-			cy.get(selector).then(($element) => {
-				const rawValue = $element.val() || $element.text();
-				return parseMonetaryValue(rawValue, `Valor em ${selector}`);
-			});
-
-		readValue(this.selectors.productPrice).then((price) => {
+		readMonetaryValue(this.selectors.productPrice).then((price) => {
 			expect(price).to.be.greaterThan(0).and.closeTo(expectedPrice, 0.01);
-			readValue(this.selectors.productQuantity).then((quantity) => {
+			readMonetaryValue(this.selectors.productQuantity).then((quantity) => {
 				expect(quantity).to.be.greaterThan(0);
-				readValue(this.selectors.productTotal).then((total) => {
+				readMonetaryValue(this.selectors.productTotal).then((total) => {
 					expect(total).to.be.greaterThan(0);
 					expect(total).to.be.closeTo(price * quantity, 0.01);
 				});

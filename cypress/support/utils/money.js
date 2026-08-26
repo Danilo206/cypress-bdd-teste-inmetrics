@@ -9,3 +9,9 @@ export const parseMonetaryValue = (rawValue, description) => {
 
 	return Number(normalizedText);
 };
+
+export const readMonetaryValue = (selector) =>
+	cy.get(selector).then(($element) => {
+		const rawValue = $element.val() || $element.text();
+		return parseMonetaryValue(rawValue, `Valor em ${selector}`);
+	});

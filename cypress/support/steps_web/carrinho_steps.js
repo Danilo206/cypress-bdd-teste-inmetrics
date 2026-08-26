@@ -16,7 +16,7 @@ When('adiciono o produto {string} ao carrinho', (productName) => {
 	selectProduct(productName);
 	addCurrentProductToCart();
 	productDetailsPage.assertProductAdded();
-	cartPage.openViewCartLink();
+	productDetailsPage.openCartFromModal();
 	cy.wrap(productName).as('productName');
 });
 
