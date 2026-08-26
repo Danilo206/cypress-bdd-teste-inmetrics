@@ -41,9 +41,7 @@ class ProductDetailsPage {
 		cy.get(this.selectors.cartModalHeader).should('be.visible');
 		cy.get(this.selectors.cartModalBody).should('be.visible');
 		cy.get(this.selectors.cartModalFooter).should('be.visible');
-		cy.get(this.selectors.cartModalText)
-			.should('be.visible')
-			.and('contain.text', 'added to cart');
+		cy.get(this.selectors.cartModalText).should('be.visible').and('contain.text', 'added to cart');
 	}
 
 	openCartFromModal() {
