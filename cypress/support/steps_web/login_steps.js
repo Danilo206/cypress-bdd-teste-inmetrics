@@ -1,6 +1,7 @@
 import { Given, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { faker } from '@faker-js/faker';
 import loginPage from '../pages/LoginPage';
+import loginAssertions from '../assertions/LoginAssertions';
 
 const email = Cypress.env('AUTOMATIONEXERCISE_EMAIL') || Cypress.env('EMAIL') || '';
 const password = Cypress.env('AUTOMATIONEXERCISE_PASSWORD') || Cypress.env('PASSWORD') || '';
@@ -18,9 +19,9 @@ Given('que acesso a página automationexercise com credenciais aleatórias invá
 });
 
 Then('devo ser redirecionado para a página inicial', () => {
-	loginPage.assertLoggedInUser('Teste Automacao');
+	loginAssertions.assertLoggedInUser(loginPage.path, loginPage.selectors, 'Teste Automacao');
 });
 
 Then('devo ver uma mensagem de erro', () => {
-	loginPage.assertInvalidLoginMessage('Your email or password is incorrect!');
+	loginAssertions.assertInvalidLoginMessage(loginPage.selectors, 'Your email or password is incorrect!');
 });

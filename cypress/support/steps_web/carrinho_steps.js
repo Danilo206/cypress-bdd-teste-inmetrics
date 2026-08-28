@@ -3,6 +3,10 @@ import productsPage from '../pages/ProductsPage';
 import productDetailsPage from '../pages/ProductDetailsPage';
 import cartPage from '../pages/CartPage';
 import checkoutPage from '../pages/CheckoutPage';
+import cartAssertions from '../assertions/CartAssertions';
+import checkoutAssertions from '../assertions/CheckoutAssertions';
+import productsAssertions from '../assertions/ProductsAssertions';
+import productDetailsAssertions from '../assertions/ProductDetailsAssertions';
 import { addCurrentProductToCart, searchProduct, selectProduct } from '../actions/productActions';
 
 Given('que acesso a página de carrinho sem produtos', () => {
@@ -12,10 +16,10 @@ Given('que acesso a página de carrinho sem produtos', () => {
 
 When('adiciono o produto {string} ao carrinho', (productName) => {
 	searchProduct(productName);
-	productsPage.assertProductsDisplayed();
+	productsAssertions.assertProductsDisplayed(productsPage.selectors, productsPage.searchTerm);
 	selectProduct(productName);
 	addCurrentProductToCart();
-	productDetailsPage.assertProductAdded();
+	productDetailsAssertions.assertProductAdded(productDetailsPage.selectors);
 	productDetailsPage.openCartFromModal();
 	cy.wrap(productName).as('productName');
 });
@@ -29,16 +33,16 @@ When('removo o produto do carrinho', () => {
 });
 
 Then('visualizo o produto {string} no carrinho', (productName) => {
-	cartPage.assertProductDisplayed(productName);
-	cy.get('@productPrice').then((price) => cartPage.assertValues(price));
+	cartAssertions.assertProductDisplayed(cartPage.selectors, productName);
+	cy.get('@productPrice').then((price) => cartAssertions.assertValues(cartPage.selectors, price));
 });
 
 Then('visualizo os produtos inseridos em checkout com sucesso', () => {
-	checkoutPage.assertDetailsDisplayed();
-	cy.get('@productName').then((productName) => checkoutPage.assertProductDisplayed(productName));
-	cy.get('@productPrice').then((price) => checkoutPage.assertValues(price));
+	checkoutAssertions.assertDetailsDisplayed(checkoutPage.selectors);
+	cy.get('@productName').then((productName) => checkoutAssertions.assertProductDisplayed(checkoutPage.selectors, productName));
+	cy.get('@productPrice').then((price) => checkoutAssertions.assertValues(checkoutPage.selectors, price));
 });
 
 Then('visualizo mensagem de carrinho vazio', () => {
-	cartPage.assertEmpty();
+	cartAssertions.assertEmpty(cartPage.selectors);
 });

@@ -1,5 +1,6 @@
 import { Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import productDetailsPage from '../pages/ProductDetailsPage';
+import productDetailsAssertions from '../assertions/ProductDetailsAssertions';
 import { addCurrentProductToCart, selectProduct } from '../actions/productActions';
 
 When('seleciono o produto {string} e adiciono ao carrinho', (productName) => {
@@ -8,5 +9,5 @@ When('seleciono o produto {string} e adiciono ao carrinho', (productName) => {
 });
 
 Then('o modal de produto adicionado ao carrinho deve ser exibido', () => {
-	productDetailsPage.assertProductAdded();
+	productDetailsAssertions.assertProductAdded(productDetailsPage.selectors);
 });
