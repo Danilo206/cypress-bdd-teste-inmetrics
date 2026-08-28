@@ -38,17 +38,6 @@ class LoginPage {
 		this.fillCredentials(email, password);
 		cy.get(this.selectors.loginButton).click();
 	}
-
-	assertLoggedInUser(userName) {
-		cy.url().should('not.include', this.path);
-		cy.get(this.selectors.logoutLink).should('exist');
-		cy.get(this.selectors.deleteAccountLink).should('exist');
-		cy.get(this.selectors.userIcon).should('exist').and('contain.text', userName);
-	}
-
-	assertInvalidLoginMessage(message) {
-		cy.get(this.selectors.loginErrorMessage).should('be.visible').and('contain.text', message);
-	}
 }
 
 export default new LoginPage();

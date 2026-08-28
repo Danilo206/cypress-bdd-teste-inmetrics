@@ -1,5 +1,6 @@
 import { parseMonetaryValue } from '../utils/money';
 import { CART_ROUTE } from './CartPage';
+import productDetailsAssertions from '../assertions/ProductDetailsAssertions';
 
 const cartModalFooter = '.modal-footer';
 
@@ -18,8 +19,7 @@ class ProductDetailsPage {
 
 	parseValue(rawValue, description) {
 		const value = parseMonetaryValue(rawValue, description);
-		expect(value, `${description} inválido`).to.be.a('number').and.greaterThan(0);
-		return value;
+		return productDetailsAssertions.assertPrice(value, description);
 	}
 
 	capturePrice() {
@@ -34,14 +34,6 @@ class ProductDetailsPage {
 
 	addToCart() {
 		cy.get(this.selectors.addToCartButton).should('be.visible').click();
-	}
-
-	assertProductAdded() {
-		cy.get(this.selectors.cartModal).should('be.visible');
-		cy.get(this.selectors.cartModalHeader).should('be.visible');
-		cy.get(this.selectors.cartModalBody).should('be.visible');
-		cy.get(this.selectors.cartModalFooter).should('be.visible');
-		cy.get(this.selectors.cartModalText).should('be.visible').and('contain.text', 'added to cart');
 	}
 
 	openCartFromModal() {

@@ -40,23 +40,6 @@ class ProductsPage {
 			.should('be.visible')
 			.click();
 	}
-
-	assertProductsDisplayed() {
-		cy.get(this.selectors.productsItems).should('be.visible');
-		cy.get(this.selectors.productsTitle).should('be.visible');
-		cy.get(this.selectors.productImage).should('be.visible');
-		if (this.searchTerm) {
-			cy.get(`${this.selectors.productImage} .productinfo p`).each(($productName) => {
-				cy.wrap($productName).should('contain.text', this.searchTerm);
-			});
-		}
-	}
-
-	assertNoProductsDisplayed() {
-		cy.get(this.selectors.productsItems).should('be.visible');
-		cy.get(this.selectors.productsTitle).should('be.visible');
-		cy.get(this.selectors.productImage).should('not.exist');
-	}
 }
 
 export default new ProductsPage();
