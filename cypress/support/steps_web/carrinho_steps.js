@@ -39,7 +39,9 @@ Then('visualizo o produto {string} no carrinho', (productName) => {
 
 Then('visualizo os produtos inseridos em checkout com sucesso', () => {
 	checkoutAssertions.assertDetailsDisplayed(checkoutPage.selectors);
-	cy.get('@productName').then((productName) => checkoutAssertions.assertProductDisplayed(checkoutPage.selectors, productName));
+	cy.get('@productName').then((productName) =>
+		checkoutAssertions.assertProductDisplayed(checkoutPage.selectors, productName),
+	);
 	cy.get('@productPrice').then((price) => checkoutAssertions.assertValues(checkoutPage.selectors, price));
 });
 
